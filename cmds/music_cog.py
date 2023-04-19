@@ -1,11 +1,11 @@
 import discord
 from discord.ext import commands
-
+from core.classes import Cog_Extension
 from yt_dlp import YoutubeDL
 
-class music_cog(commands.Cog):
+class music_cog(Cog_Extension):
 	def __init__(self, bot):
-		self.bot = bot
+		Cog_Extension.__init__()
 		
 		self.is_playing = False
 		self.is_paused = False
@@ -22,7 +22,7 @@ class music_cog(commands.Cog):
 				info = ydl.extract_info("ytsearch:%s" % item, download=False)['entries'][0]
 			except Exception:
 				return False
-			return {'source': info["format"[0]['url']], 'title': info["title"]}
+			return {'source': info["format"][0]['url'], 'title': info["title"]}
 
 	def play_next(self):
 		if len(self.music_queue) > 0:
@@ -72,7 +72,7 @@ class music_cog(commands.Cog):
 				await ctx.send("無法下載歌曲。非正確的格式，請嘗試不同的關鍵字")
 			else:
 				await ctx.send("歌曲已經加入清單之中")
-				slef.music_queue.append([song, voice_channel])
+				self.music_queue.append([song, voice_channel])
 
 				if self.is_playing == False:
 					await self.play_music(ctx)
@@ -135,3 +135,5 @@ class music_cog(commands.Cog):
 		self.is_paused = False
 		await self.vc.disconnect()
 		
+async def setup(bot):
+	await bot.add_cog(music_cog(bot))

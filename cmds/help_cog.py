@@ -1,9 +1,10 @@
 import discord
 from discord.ext import commands
+from core.classes import Cog_Extension
 
-class help_cog(commands.Cog):
+class help_cog(Cog_Extension):
 	def __init__(self, bot):
-		self.bot = bot
+		Cog_Extension.__init__()
 
 		self.help_message = """
 ```
@@ -34,3 +35,6 @@ class help_cog(commands.Cog):
 		@commands.command(name="help", help="列出所有可用指令")
 		async def help(self, ctx):
 			await ctx.send(self.help_message)
+
+async def setup(bot):
+	await bot.add_cog(help_cog(bot))
