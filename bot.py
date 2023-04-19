@@ -3,9 +3,6 @@ from discord.ext import commands
 import json
 import os
 
-from cmds.help_cog import help_cog
-from cmds.music_cog import music_cog
-
 with open('setting.json', 'r', encoding='utf8') as jfile:
 	jdata = json.load(jfile)
 
@@ -14,6 +11,12 @@ bot = commands.Bot(command_prefix = '!!', intents=discord.Intents.all(), case_in
 @bot.event
 async def on_ready():
 	print(f"等登!機器人已經上線")
+
+	for filename in os.listdir('./cmds'):
+		if filename.endswith('.py'):
+			print(f'cmds.{filename[:-3]}')
+			await bot.load_extension(f'cmds.{filename[:-3]}')
+
 
 @bot.command()
 async def load(ctx, extension):
@@ -25,7 +28,7 @@ async def load(ctx, extension):
 		for filename in os.listdir('./cmds'):
 			if filename.endswith('.py'):
 				print(f'cmds.{filename[:-3]}')
-				bot.load_extension(f'cmds.{filename[:-3]}')
+				await bot.load_extension(f'cmds.{filename[:-3]}')
 
 @bot.command()
 async def reload(ctx, extension):
@@ -35,7 +38,7 @@ async def reload(ctx, extension):
 	else:
 		for filename in os.listdir('./cmds'):
 			if filename.endswith('.py'):
-				bot.reload_extension(f'cmds.{filename[:-3]}')
+				await bot.reload_extension(f'cmds.{filename[:-3]}')
 
 @bot.command()
 async def unload(ctx, extension):
@@ -45,12 +48,8 @@ async def unload(ctx, extension):
 	else:
 		for filename in os.listdir('./cmds'):
 			if filename.endswith('.py'):
-				bot.unload_extension(f'cmds.{filename[:-3]}')
+				await bot.unload_extension(f'cmds.{filename[:-3]}')
 
-for filename in os.listdir('./cmds'):
-	if filename.endswith('.py'):
-		print(f'cmds.{filename[:-3]}')
-		bot.load_extension(f'cmds.{filename[:-3]}')
 
 if __name__ == "__main__":
 	bot.run(jdata['token'])

@@ -5,7 +5,7 @@ from yt_dlp import YoutubeDL
 
 class music_cog(Cog_Extension):
 	def __init__(self, bot):
-		Cog_Extension.__init__()
+		Cog_Extension.__init__(self, bot)
 		
 		self.is_playing = False
 		self.is_paused = False

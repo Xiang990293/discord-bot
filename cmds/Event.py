@@ -9,7 +9,7 @@ with open('setting.json', 'r', encoding='utf8') as jfile:
 
 class Event(Cog_Extension):
 	def __init__(self, bot):
-		Cog_Extension.__init__()
+		Cog_Extension.__init__(self, bot)
 	
 	@commands.Cog.listener()
 	async def on_member_join(self, member):

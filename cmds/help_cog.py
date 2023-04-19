@@ -4,7 +4,7 @@ from core.classes import Cog_Extension
 
 class help_cog(Cog_Extension):
 	def __init__(self, bot):
-		Cog_Extension.__init__()
+		Cog_Extension.__init__(self, bot)
 
 		self.help_message = """
 ```
