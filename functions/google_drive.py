@@ -1,7 +1,6 @@
 from google.cloud import storage
 from requests.exceptions import ConnectionError, Timeout
 from yt_dlp import YoutubeDL
-from google.cloud import storage
 import functions.google_drive as fgd
 import os
 import threading
