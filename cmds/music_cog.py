@@ -22,7 +22,8 @@ class music_cog(Cog_Extension):
 				info = ydl.extract_info("ytsearch:%s" % item, download=False)['entries'][0]
 			except Exception:
 				return False
-			return {'source': info["format"][0]['url'], 'title': info["title"]}
+			
+			return {'source': info["formats"][0]['url'], 'title': info["title"]}
 
 	def play_next(self):
 		if len(self.music_queue) > 0:
@@ -32,7 +33,7 @@ class music_cog(Cog_Extension):
 
 			self.music_queue.pop()
 	
-			self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next)
+			self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
 		else:
 			self.is_playing = False
 	
@@ -42,18 +43,17 @@ class music_cog(Cog_Extension):
 			m_url = self.music_queue[0][0]['source']
 
 			if self.vc == None or not self.vc.is_connected():
-				self.vc = await self.musicqueue[0][1].connect()
+				self.vc = await self.music_queue[0][1].connect()
 
 				if self.vc == None:
 					await ctx.send("無法連接至語音頻道")
 					return
 			else:
-				await self.vc.move_to(self.musicqueue[0][1])
+				await self.vc.move_to(self.music_queue[0][1])
 			
 			self.music_queue.pop(0)
 			
-			self.vc.play(discord.FFmoegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
-
+			self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
 		else:
 			self.is_playing = False
 		
@@ -61,7 +61,8 @@ class music_cog(Cog_Extension):
 	async def play(self, ctx, *args):
 		query = " ".join(args)
 		
-		voice_channel = ctx.author.voice.channel()
+		voice_channel = ctx.author.voice.channel
+
 		if voice_channel == None:
 			await ctx.send("請進到語音頻道")
 		elif self.is_paused:
@@ -76,6 +77,7 @@ class music_cog(Cog_Extension):
 
 				if self.is_playing == False:
 					await self.play_music(ctx)
+	
 	@commands.command(name='pause', aliases=['pa','stop','stopped'], help="停止播放目前的歌曲")
 	async def pause(self, ctx, *args):
 		if self.is_playing:
@@ -84,6 +86,8 @@ class music_cog(Cog_Extension):
 			self.vc.pause()
 			await ctx.send("歌曲已暫停")
 		elif self.is_paused:
+			self.is_playing = True
+			self.is_paused = False
 			self.vc.resume()
 			await ctx.send("歌曲再次播放~")
 
@@ -94,6 +98,11 @@ class music_cog(Cog_Extension):
 			self.is_paused = False
 			self.vc.resume()
 			await ctx.send("歌曲再次播放")
+		elif self.is_paused:
+			self.is_playing = False
+			self.is_paused = True
+			self.vc.pause()
+			await ctx.send("歌曲已暫停")
 
 	@commands.command(name='skip', aliases=['s'], help="跳過目前的歌曲")
 	async def skip(self, ctx, *args):
@@ -101,8 +110,8 @@ class music_cog(Cog_Extension):
 			self.vc.stop()
 			await self.play_music(ctx)
 	
-	@commands.command(name='queue', aliases=['q','queue'], help="列出所有目前在清單中的所有歌曲")
-	async def queue(self, ctx):
+	@commands.command(name='get_queue', aliases=['gque'], help="列出所有目前在清單中的所有歌曲")
+	async def get_queue(self, ctx):
 		retval = ""
 
 		for i in range(0, len(self.music_queue)):
@@ -114,7 +123,7 @@ class music_cog(Cog_Extension):
 		else:
 			await ctx.send("目前清單中沒有任何歌曲")
 
-	@commands.command(name='clear', aliases=['c'], help="清除目前清單中所有歌曲")
+	@commands.command(name='clear', help="清除目前清單中所有歌曲")
 	async def clear(self, ctx, *args):
 		if self.vc != None and self.is_playing:
 			self.vc.stop()

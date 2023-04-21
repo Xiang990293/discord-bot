@@ -2,6 +2,8 @@ from core.classes import Cog_Extension
 import discord
 from discord.ext import commands
 import json
+import os
+from PIL import Image
 
 class Main(Cog_Extension):
 	def __init__(self, bot):
@@ -12,13 +14,16 @@ class Main(Cog_Extension):
 		await ctx.send(f'{round(self.bot.latency*1000)} (ms)')
 
 	@commands.command()
-	async def picture(self, ctx):
-		pic = discord.File()
-		await ctx.send(pic)
+	async def picture(self, ctx, *arg):
+		if arg == ():
+			await ctx.send(file=discord.File("NoURL.png"))
+		else:
+			pic = arg[0]
+			await ctx.send(pic)
 
 	@commands.command()
 	async def test(self, ctx):
-		await ctx.send(ctx.message.channel)
+		await ctx.send(f"{ctx.message.channel}, I am here!")
 
 async def setup(bot):
 	await bot.add_cog(Main(bot))
