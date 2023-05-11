@@ -25,3 +25,5 @@ setting.json
 client_secret_640858056770-bk0paguasbv1efjp3m1v5lqgjj16qnlq.apps.googleusercontent.com.json
 discord-bot-384217-cd8d059efffe.json
 application_default_credentials.json
+
+__pycache__/*
