@@ -27,3 +27,4 @@ discord-bot-384217-cd8d059efffe.json
 application_default_credentials.json
 
 __pycache__/*
+.vscode/*
