@@ -19,9 +19,10 @@ class video_download(Cog_Extension):
 	def __init__(self, bot):
 		Cog_Extension.__init__(self, bot)
 		
+		self.amount = 0
 		self.options = {
 			'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
-			'outtmpl': 'temp_file/download.%(ext)s'
+			'outtmpl': f'temp_file/download_{self.amount}.%(ext)s'
 		}
 		
 	@commands.command(name='download_video', aliases=['dv', 'dvid'], help="下載影片")
@@ -29,29 +30,10 @@ class video_download(Cog_Extension):
 		def upload_to_gcs(file_data, project_id, bucket_name, filename):
 			self.bot.loop.create_task(ctx.send("正在上傳雲端..."))
 			
-			# Create a Google Cloud Storage client
-			storage_client = storage.Client(project=project_id)
-
-			# Get a reference to the storage bucket
-			bucket = storage_client.bucket(bucket_name)
-
-			# Upload the file to the bucket
-			blob = bucket.blob(filename)
-			blob.upload_from_string(file_data, timeout=300)
-
-			# Set the blob's ACL to public-read
-			blob.acl.save_predefined("public-read")
-
-			# Get the publicly accessible URL for the file
-			url = f"https://storage.googleapis.com/{bucket.name}/{blob.name}"
-
-			return url
+			return fgd.upload_to_gcs(file_data, project_id, bucket_name, filename)
 
 		def download_and_upload(url, options):
-			# Download the video
-			with YoutubeDL(options) as ydl:
-				info_dict = ydl.extract_info(url, download=True)
-				filename = ydl.prepare_filename(info_dict)
+			filename, info_dict = fgd.download_and_upload(url, options)
 
 			# Upload the file to Google Cloud Storage
 			with open(filename, "rb") as f:
@@ -62,13 +44,18 @@ class video_download(Cog_Extension):
 			# Delete the downloaded file
 			os.remove(filename)
 
+			self.amount -= 1
+
 			# Send the message with the download URL
 			message = f"已將下載結果上傳雲端，可供下載: {encoded_url}"
 			self.bot.loop.create_task(ctx.send(message))
 
+			self.bot.loop.create_task(ctx.send(f"下載期限30天"))
+
 		if ctx.author.bot:
 			await ctx.send(f"嗶啵！啵嗶。機器人！")
 		else:
+			self.amount += 1
 			thread = threading.Thread(target=download_and_upload, args=(url, self.options))
 			thread.start()
 
@@ -80,9 +67,9 @@ class video_download(Cog_Extension):
 		# 設定下載選項
 		if option_name in self.options:
 			self.options[option_name] = option_value
-			await ctx.send(f"Download option '{option_name}' set to '{option_value}'")
+			await ctx.send(f"已將下載設定 {option_name} 設為 {option_value}")
 		else:
-			await ctx.send(f"Invalid download option '{option_name}'")
+			await ctx.send(f":: 無效的下載設定 {option_name}")
 
 		await ctx.send(f"設定完成")
 

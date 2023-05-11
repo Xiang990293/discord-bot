@@ -1,11 +1,18 @@
 from google.cloud import storage
 from requests.exceptions import ConnectionError, Timeout
 from yt_dlp import YoutubeDL
-import functions.google_drive as fgd
 import os
 import threading
+import json
+import urllib
 
-def upload_file_to_gcs(file_data, project_id, bucket_name, filename):
+with open('setting.json', 'r', encoding='utf8') as jfile:
+	jdata = json.load(jfile)
+
+PROJECT_ID = jdata['product_id']
+BUCKET_NAME = jdata['bucket_name']
+
+def upload_to_gcs(file_data, project_id, bucket_name, filename):
 	# Create a Google Cloud Storage client
 	storage_client = storage.Client(project=project_id)
 
@@ -14,7 +21,7 @@ def upload_file_to_gcs(file_data, project_id, bucket_name, filename):
 
 	# Upload the file to the bucket
 	blob = bucket.blob(filename)
-	blob.upload_from_string(file_data)
+	blob.upload_from_string(file_data, timeout=300)
 
 	# Set the blob's ACL to public-read
 	blob.acl.save_predefined("public-read")
@@ -24,34 +31,13 @@ def upload_file_to_gcs(file_data, project_id, bucket_name, filename):
 
 	return url
 
-async def download_video_and_upload_file_to_gcs(options, url, project_id, bucket_name):
-	try:
-		with YoutubeDL(options) as ydl:
-			info = ydl.extract_info(url, download=True)
-			filename = ydl.prepare_filename(info)
-			with open(filename, 'rb') as f:
-				file_data = f.read()
-			url = upload_file_to_gcs(file_data, project_id, bucket_name, f"{info['id']}.{info['ext']}")
-			await channel.send(f"Uploaded {info['title']} to Google Cloud Storage: {url}")
-	except Exception as e:
-		await channel.send(f"Error occurred while downloading/uploading: {e}")
-	finally:
-		os.remove(filename)
-		
-	def downloading():
-		with YoutubeDL(options) as ydl:
-			ydl.download(url)
+def download_and_upload(url, options):
+	# Download the video
+	with YoutubeDL(options) as ydl:
+		info_dict = ydl.extract_info(url, download=True)
+		filename = ydl.prepare_filename(info_dict)
 
-	download_thread = threading.Thread(target=downloading, args=(url, options))
-	download_thread.start()
-	
-	filename = os.listdir('./temp_file')[0]
-
-	with open(f'temp_file/{filename}', "rb") as f:
-		file_data = f.read()
-	
-	# Create a Google Cloud Storage client
-	os.remove(filename)
+	return filename, info_dict
 
 	
 # https://drive.google.com/drive/folders/1eb0873qAzIgmk8bELKKc3GVHtp-CXgzh?usp=sharing
