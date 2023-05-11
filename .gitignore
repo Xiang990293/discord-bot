@@ -26,5 +26,5 @@ client_secret_640858056770-bk0paguasbv1efjp3m1v5lqgjj16qnlq.apps.googleuserconte
 discord-bot-384217-cd8d059efffe.json
 application_default_credentials.json
 
-__pycache__/*
-.vscode/*
+/__pycache__/
+/.vscode/
