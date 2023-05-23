@@ -16,22 +16,6 @@ with open('setting.json', 'r', encoding='utf8') as jfile:
 PROJECT_ID = jdata['product_id']
 BUCKET_NAME = jdata['bucket_name']
 
-class ExceptionThread(threading.Thread):
-    def __init__(self, target, args=(), kwargs={}):
-        super().__init__(target=target, args=args, kwargs=kwargs)
-        self._exc_info = None
-
-    def run(self):
-        try:
-            super().run()
-        except Exception as e:
-            self._exc_info = (type(e), e, e.__traceback__)
-
-    def join(self, timeout=None):
-        super().join(timeout)
-        if self._exc_info:
-            raise self._exc_info[1].with_traceback(self._exc_info[2])
-
 class video_download(Cog_Extension):
 	def __init__(self, bot):
 		Cog_Extension.__init__(self, bot)
@@ -41,9 +25,24 @@ class video_download(Cog_Extension):
 			'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
 			'outtmpl': f'temp_file/download_{self.amount}.%(ext)s'
 		}
+
+	@commands.command(name='reset', aliases=['rs'], help="下載影片")
+	async def reset(self, ctx):
+		await ctx.message.delete()
+		self.amount = 0
+		print("下載除列已清空")
+		await ctx.send("下載除列已清空")
 		
 	@commands.command(name='download_video', aliases=['dv', 'dvid'], help="下載影片")
 	async def dowmload_video(self, ctx, url: str):
+		def is_url_available(url):
+			try:
+				with YoutubeDL() as ydl:
+					ydl.extract_info(url, download=False)
+				return True
+			except yt_dlp.utils.DownloadError:
+				return False
+		
 		def upload_to_gcs(file_data, project_id, bucket_name, filename):
 			self.bot.loop.create_task(ctx.send("正在上傳雲端..."))
 			print("正在上傳雲端...")
@@ -51,13 +50,7 @@ class video_download(Cog_Extension):
 			return fgd.upload_to_gcs(file_data, project_id, bucket_name, filename)
 
 		def download_and_upload(url, options):
-			try:
-				filename, info_dict = fgd.download_and_upload(url, options)
-			except yt_dlp.utils.DownloadError:
-				print("A B C D 我糙你媽2")
-				raise
-			except yt_dlp.utils.ExtractorError:
-				raise
+			filename, info_dict = fgd.download_and_upload(url, options)
 
 			# Upload the file to Google Cloud Storage
 			with open(filename, "rb") as f:
@@ -82,17 +75,18 @@ class video_download(Cog_Extension):
 		else:
 			await ctx.message.delete()
 			if self.amount == 0:
-				print("正在下載影片...")
-				await ctx.send("正在下載影片...")
 				self.amount += 1
-				try:
+				await ctx.send(f"正在檢查連結是否可用...")
+				if is_url_available(url):
+					print(f"正在下載： {url}")
+					await ctx.send(f"正在下載： {url}")
 					thread = threading.Thread(target=download_and_upload, args=(url, self.options))
 					thread.start()
-				except Exception as e:
+				else:
 					print("影片連結不可用")
 					await ctx.send("影片連結不可用")
 					self.amount == 0
-
+				
 			else:
 				print("目前在下載其他影片")
 				await ctx.send("目前在下載其他影片...")

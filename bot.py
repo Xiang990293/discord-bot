@@ -21,6 +21,7 @@ async def on_ready():
 
 @bot.command()
 async def load(ctx, extension):
+	await ctx.message.delete()
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			try:
@@ -45,6 +46,7 @@ async def load(ctx, extension):
 
 @bot.command()
 async def reload(ctx, extension):
+	await ctx.message.delete()
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			print(f'重新載入 cmds.{extension} 完成!')
@@ -62,6 +64,7 @@ async def reload(ctx, extension):
 
 @bot.command()
 async def unload(ctx, extension):
+	await ctx.message.delete()
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			try:

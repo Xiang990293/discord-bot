@@ -34,16 +34,10 @@ def upload_to_gcs(file_data, project_id, bucket_name, filename):
 
 def download_and_upload(url, options):
 	# Download the video
-	try:
-		with YoutubeDL(options) as ydl:
-			info_dict = ydl.extract_info(url, download=True)
-			filename = ydl.prepare_filename(info_dict)
-		return filename, info_dict
-	except yt_dlp.utils.DownloadError:
-		print("A B C D 我糙你媽")
-		raise
-	except yt_dlp.utils.ExtractorError:
-		raise
+	with YoutubeDL(options) as ydl:
+		info_dict = ydl.extract_info(url, download=True)
+		filename = ydl.prepare_filename(info_dict)
+	return filename, info_dict
 	
 
 	
