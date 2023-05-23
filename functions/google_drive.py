@@ -1,6 +1,7 @@
 from google.cloud import storage
 from requests.exceptions import ConnectionError, Timeout
 from yt_dlp import YoutubeDL
+import yt_dlp
 import os
 import threading
 import json
@@ -33,11 +34,17 @@ def upload_to_gcs(file_data, project_id, bucket_name, filename):
 
 def download_and_upload(url, options):
 	# Download the video
-	with YoutubeDL(options) as ydl:
-		info_dict = ydl.extract_info(url, download=True)
-		filename = ydl.prepare_filename(info_dict)
-
-	return filename, info_dict
+	try:
+		with YoutubeDL(options) as ydl:
+			info_dict = ydl.extract_info(url, download=True)
+			filename = ydl.prepare_filename(info_dict)
+		return filename, info_dict
+	except yt_dlp.utils.DownloadError:
+		print("A B C D 我糙你媽")
+		raise
+	except yt_dlp.utils.ExtractorError:
+		raise
+	
 
 	
 # https://drive.google.com/drive/folders/1eb0873qAzIgmk8bELKKc3GVHtp-CXgzh?usp=sharing

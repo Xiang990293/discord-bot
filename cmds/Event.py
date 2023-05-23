@@ -27,6 +27,9 @@ class Event(Cog_Extension):
 	async def on_message(self, msg):
 		if msg.content == 'people':
 			await msg.channel.send("hi")
+		elif 'ji394su3' in msg.content:
+			await msg.delete()
+			await msg.channel.send("我愛你")
 
 async def setup(bot):
 	await bot.add_cog(Event(bot))

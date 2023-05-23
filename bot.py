@@ -47,9 +47,9 @@ async def load(ctx, extension):
 async def reload(ctx, extension):
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
-			print(f'載入 cmds.{extension} 完成!')
+			print(f'重新載入 cmds.{extension} 完成!')
 			await bot.reload_extension(f'cmds.{extension}')
-			await ctx.send(f'載入 {extension} 完成!')
+			await ctx.send(f'重新載入 {extension} 完成!')
 		else:
 			print(f'cmds.{extension} 不存在')
 			await ctx.send(f'{extension} 不存在')
