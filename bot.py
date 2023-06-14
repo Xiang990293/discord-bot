@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import json
 import os
+import inspect
 
 with open('setting.json', 'r', encoding='utf8') as jfile:
 	jdata = json.load(jfile)
@@ -47,6 +48,9 @@ async def load(ctx, extension):
 @bot.command()
 async def reload(ctx, extension):
 	await ctx.message.delete()
+	# music_cog = bot.get_cog("music")
+	# if music_cog.vc != None | music_cog.vc.is_connected():
+	# 	music_cog.vc.disconnect()
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			print(f'重新載入 cmds.{extension} 完成!')
@@ -65,6 +69,9 @@ async def reload(ctx, extension):
 @bot.command()
 async def unload(ctx, extension):
 	await ctx.message.delete()
+	# music_cog = bot.get_cog("music")
+	# if music_cog.vc != None | music_cog.vc.is_connected():
+	# 	music_cog.vc.disconnect()
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			try:
@@ -87,6 +94,15 @@ async def unload(ctx, extension):
 				continue
 		await ctx.send(f'卸載完成!')
 
+@bot.command(name='bot_test', aliases=['btest'], help="機器人測試指令")
+async def bot_test(ctx, *, arg):
+	await ctx.message.delete()
+	res = eval(arg)
+	print(str(res))
+	if inspect.isawaitable(res):
+		await ctx.send("```await "+arg+"```\n"+ str(await res))
+	else:
+		await ctx.send("```"+arg+"```\n"+ str(res))
 
 if __name__ == "__main__":
 	bot.run(jdata['token'])

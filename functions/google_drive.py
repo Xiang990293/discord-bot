@@ -13,6 +13,8 @@ with open('setting.json', 'r', encoding='utf8') as jfile:
 PROJECT_ID = jdata['product_id']
 BUCKET_NAME = jdata['bucket_name']
 
+STOREAGE_CLASS = 'DURABLE_REDUCED_AVALIBILITY'
+
 def upload_to_gcs(file_data, project_id, bucket_name, filename):
 	# Create a Google Cloud Storage client
 	storage_client = storage.Client(project=project_id)
@@ -22,7 +24,7 @@ def upload_to_gcs(file_data, project_id, bucket_name, filename):
 
 	# Upload the file to the bucket
 	blob = bucket.blob(filename)
-	blob.upload_from_string(file_data, timeout=300)
+	blob.upload_from_string(file_data, timeout=300, predefined_storage_class=STOREAGE_CLASS)
 
 	# Set the blob's ACL to public-read
 	blob.acl.save_predefined("public-read")

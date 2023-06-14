@@ -30,3 +30,7 @@ application_default_credentials.json
 /.vscode/
 
 *.pyc
+
+*.ogg
+
+/files/
