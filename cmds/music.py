@@ -126,6 +126,10 @@ class music(Cog_Extension):
 		elif self.is_paused:
 			self.vc.resume()
 
+		if limit > 20:
+			await ctx.send("無法容納過大上限之播放清單，上限將下調至 20")
+			limit = 20
+
 		if "https://" not in args[0]:
 			query = " ".join(args)
 			search = self.search_yt(query, True)
