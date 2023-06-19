@@ -48,9 +48,11 @@ async def load(ctx, extension):
 @bot.command()
 async def reload(ctx, extension):
 	await ctx.message.delete()
-	# music_cog = bot.get_cog("music")
-	# if music_cog.vc != None | music_cog.vc.is_connected():
-	# 	music_cog.vc.disconnect()
+	music_cog = bot.get_cog("music")
+	
+	if music_cog is not None:
+		if music_cog.vc is not None and music_cog.vc.is_connected():
+			await music_cog.vc.disconnect()
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			print(f'重新載入 cmds.{extension} 完成!')
