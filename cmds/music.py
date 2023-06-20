@@ -23,7 +23,7 @@ class music(Cog_Extension):
 				return format['url']
 		return None
 
-	def search_yt(self, item, is_search_mode = False, long_limit=10):
+	def search_yt(self, item, is_search_mode = False, long_limit=10, is_list=False):
 		if is_search_mode:
 			with YoutubeDL(self.YDL_OPTIONS) as ydl:
 				try:
@@ -36,7 +36,8 @@ class music(Cog_Extension):
 						return {'source': format['url'], 'Minecraft': False, 'title': info["title"]}
 
 				return False
-		else:
+		elif is_list:
+			playlist_info = []
 			with YoutubeDL(self.YDL_OPTIONS) as ydl:
 				try:
 					info = ydl.extract_info(item, download=False)
@@ -47,7 +48,7 @@ class music(Cog_Extension):
 						playlist_info = [
 							{
 								'source': self.get_audio_url(video),
-                                'Minecraft': False,
+								'Minecraft': False,
 								'title': video['title']
 							}
 							for video in videos
@@ -57,7 +58,7 @@ class music(Cog_Extension):
 						video = info
 						return {
 							'source': self.get_audio_url(video),
-                            'Minecraft': False,
+							'Minecraft': False,
 							'title': video['title']
 						}
 				except Exception:
@@ -152,7 +153,7 @@ class music(Cog_Extension):
 					await self.play_music(ctx)
 		elif "playlist" in args[0]:
 			url = args[0]
-			playlist = self.search_yt(url, long_limit=limit)
+			playlist = self.search_yt(url, long_limit=limit, is_list=True)
 			if type(playlist) == type(True):
 				await ctx.send("無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
 			else:
@@ -173,7 +174,7 @@ class music(Cog_Extension):
 				v = url.find('&v=')
 				if v < list:
 					url = url[:list]
-			song = self.search_yt(url, long_limit=limit)
+			song = self.search_yt(url, long_limit=limit, is_list=False)
 			if type(song) == type(True):
 				await ctx.send("無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
 			else:
