@@ -4,7 +4,7 @@ import os
 def get_jdata(mode = 1):
 	jsource = ['setting.json','secrect.json']
 
-	mode = {"run": 1, "debug": 0}
+	# mode = {"run": 1, "debug": 0}
 
 	with open(jsource[mode], 'r', encoding='utf8') as jfile:
 		if mode == 0:
