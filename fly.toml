@@ -1,0 +1,9 @@
+# fly.toml app configuration file generated for minecraft-discord-bot on 2023-06-21T11:47:37+08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "minecraft-discord-bot"
+primary_region = "hkg"
+
+

@@ -1,0 +1,6 @@
+discord.py>=2.0.0,<3
+python-dotenv==0.20.0
+yt_dlp>=2023.3.3
+youtube_dl>=2021.12.17
+google-cloud-storage>=2.8.0
+pillow>=9.5.0
