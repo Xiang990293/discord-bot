@@ -4,9 +4,11 @@ from discord.ext import commands
 import json
 import os
 from PIL import Image
+import functions.get_jdata as getj
 
-with open('setting.json', 'r', encoding='utf8') as jfile:
-	jdata = json.load(jfile)
+MODE = 1
+
+jdata = getj.get_jdata(MODE)
 
 class Main(Cog_Extension):
 	def __init__(self, bot):

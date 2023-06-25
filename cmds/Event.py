@@ -3,9 +3,11 @@ from discord.ext import commands
 from core.classes import Cog_Extension
 import json
 import os
+import functions.get_jdata as getj
 
-with open('setting.json', 'r', encoding='utf8') as jfile:
-	jdata = json.load(jfile)
+MODE = 1
+
+jdata = getj.get_jdata(MODE)
 
 class Event(Cog_Extension):
 	def __init__(self, bot):

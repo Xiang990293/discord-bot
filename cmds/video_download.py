@@ -9,9 +9,11 @@ import json
 import os
 import threading
 import urllib
+import functions.get_jdata as getj
 
-with open('setting.json', 'r', encoding='utf8') as jfile:
-	jdata = json.load(jfile)
+MODE = 1
+
+jdata = getj.get_jdata(MODE)
 
 PROJECT_ID = jdata['product_id']
 BUCKET_NAME = jdata['bucket_name']
