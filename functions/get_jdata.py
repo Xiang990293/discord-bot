@@ -12,4 +12,4 @@ def get_jdata(mode = 1):
 		else:
 			key = [i for i in jfile]
 			value = [jfile for j in key]
-			return {key[i]:os.environ.get(value[i]) for i in range(key.len())}
+			return {key[i]:os.environ.get(value[i]) for i in range(len(key))}
