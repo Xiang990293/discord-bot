@@ -10,6 +10,7 @@ def get_jdata(mode = 1):
 		if mode == 0:
 			return json.load(jfile)
 		else:
-			key = [i for i in jfile]
+			jdatat = json.load(jfile)
+			key = [i for i in jdatat]
 			value = [jfile[j] for j in key]
 			return {key[i]:os.environ.get(value[i]) for i in range(len(key))}
