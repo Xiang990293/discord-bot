@@ -2,7 +2,7 @@ import json
 import os
 
 def get_jdata(mode = 1):
-	jsource = ['setting.json','secrect.json']
+	jsource = ['setting.json','secret.json']
 
 	# mode = {"run": 1, "debug": 0}
 
