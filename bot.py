@@ -5,7 +5,7 @@ import os
 # import inspect
 
 # MODE = 1
-print(1, os.environ.get("client_id"))
+print("client_id: ", os.environ.get("client_id")+"1")
 # print(2, secrets.client_id))
 
 # bot = commands.Bot(command_prefix = '!!', intents=discord.Intents.all(), case_insensitive=True, self_bot=True)
