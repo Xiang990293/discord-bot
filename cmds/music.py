@@ -32,9 +32,11 @@ class music(Cog_Extension):
 					return False
 
 				for format in info["formats"]:
-					if format["acodec"] != "none":
+					try:
+						if format["acodec"] != "none":
+							return {'source': format['url'], 'Minecraft': False, 'title': info["title"]}
+					except Exception:
 						return {'source': format['url'], 'Minecraft': False, 'title': info["title"]}
-
 				return False
 		elif is_list:
 			playlist_info = []
