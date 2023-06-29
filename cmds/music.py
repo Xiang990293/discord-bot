@@ -70,9 +70,9 @@ class music(Cog_Extension):
 				info = ydl.extract_info(item, download=False)
 				song = [
 					{
-						'source': self.get_audio_url(video),
+						'source': self.get_audio_url(info),
 						'Minecraft': False,
-						'title': video['title']
+						'title': info['title']
 					}
 				]
 				return song
