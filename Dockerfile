@@ -3,5 +3,5 @@ WORKDIR /bot
 COPY requirements.txt /bot/
 RUN pip install -r requirements.txt
 COPY . /bot
-RUN apt add ffmpeg
+RUN apt-get install -y ffmpeg
 CMD python bot.py
