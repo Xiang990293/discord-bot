@@ -19,7 +19,10 @@ class music(Cog_Extension):
 
 	def get_audio_url(self, video):
 		for format in video['formats']:
-			if format['acodec'] != 'none' and format['vcodec'] == 'none':
+			try:
+				if format['acodec'] != 'none' and format['vcodec'] == 'none':
+					return format['url']
+			except Exception:
 				return format['url']
 		return None
 
