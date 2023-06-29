@@ -67,15 +67,16 @@ class music(Cog_Extension):
 					return False
 		else:
 			with YoutubeDL(self.YDL_OPTIONS) as ydl:
-				info = ydl.extract_info(item, download=False)
-				song = [
-					{
+				try:
+					info = ydl.extract_info(item, download=False)
+					song = {
 						'source': self.get_audio_url(info),
 						'Minecraft': False,
 						'title': info['title']
 					}
-				]
-				return song
+					return song
+				except Exception:
+					return False
 
 	def play_next(self):
 		if len(self.music_queue) > 0:
