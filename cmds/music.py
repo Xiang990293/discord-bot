@@ -281,7 +281,7 @@ class music(Cog_Extension):
 			self.vc.stop()
 			await self.play_music(ctx)
 
-	@commands.command(name='loop', aliases=['Loop', 'looping'], help="切換重複播放模式")
+	@commands.command(name='loop', aliases=['looping'], help="切換重複播放模式")
 	async def playMinecraft(self, ctx, arg):
 		await ctx.message.delete()
 		self.loop_mode += 1
