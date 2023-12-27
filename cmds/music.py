@@ -13,6 +13,7 @@ class music(Cog_Extension):
 		self.is_playing = False
 		self.is_paused = False
 		self.loop_mode = 0
+		self.playing_song = {}
 
 		self.music_queue = []
 		self.YDL_OPTIONS = {"format":"bestaudio", "noplaylist":"True"}
@@ -86,18 +87,18 @@ class music(Cog_Extension):
 		if len(self.music_queue) > 0:
 			self.is_playing = True
 			song = self.music_queue[0]
-			m_url = song['source']
+			self.playing_song = song['source']
 			self.music_queue.pop(0)
 
-			# if self.loop_mode == 0:
-			# 	self.music_queue.append(self.music_queue[0])
-			# elif self.loop_mode == 1:
-			# 	self.music_queue.insert(1, self.music_queue[0])
+			if self.loop_mode == 1:
+				self.music_queue.insert(1, self.playing_song)
+			elif self.loop_mode == 2:
+				self.music_queue.append(self.playing_song)
 
 			if song["Minecraft"] == False:
-				self.vc.play(discord.FFmpegOpusAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(self.playing_song, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
 			else:
-				self.vc.play(discord.FFmpegOpusAudio(m_url), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(self.playing_song), after=lambda e: self.play_next())
 		else:
 			self.is_playing = False
 	
@@ -282,7 +283,7 @@ class music(Cog_Extension):
 			await self.play_music(ctx)
 
 	@commands.command(name='loop', aliases=['looping'], help="切換重複播放模式")
-	async def playMinecraft(self, ctx, arg):
+	async def loop(self, ctx, *arg):
 		await ctx.message.delete()
 		self.loop_mode += 1
 		self.loop_mode %= 3
@@ -290,15 +291,20 @@ class music(Cog_Extension):
 		if arg=="help":
 			await ctx.send(f"利用 `!!loop` 進行模式切換\n單曲循環模式直接將正要開始播放的歌曲直接加入表頭\n播放列表循環模式將正要開始播放的歌曲直接加入表尾\n關閉後會再次播放當前歌曲")
 		else:
+			if arg=="0" or arg=="1" or arg=="2":
+				self.loop_mode = int(arg)
+
 			match self.loop_mode:
 				case 0:
 					loop = "正常模式"
 				case 1:
 					loop = "單曲循環模式"
+					self.music_queue.insert(1, self.playing_song)
 				case 2:
 					loop = "播放列表循環模式"
+					self.music_queue.append(self.playing_song)
 			
-			await ctx.send(f"已切換為${loop}")
+			await ctx.send(f"已切換為**{loop}**")
 
 	@commands.command(name='getqueue', aliases=['gque','gq','getq'], help="列出所有目前在清單中的所有歌曲")
 	async def getqueue(self, ctx):
