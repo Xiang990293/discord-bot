@@ -86,8 +86,8 @@ class music(Cog_Extension):
 	def play_next(self):
 		if len(self.music_queue) > 0:
 			self.is_playing = True
-			song = self.music_queue[0]
-			self.playing_song = song['source']
+			self.playing_song = self.music_queue[0]
+			murl = self.playing_song['source']
 			self.music_queue.pop(0)
 
 			if self.loop_mode == 1:
@@ -96,9 +96,9 @@ class music(Cog_Extension):
 				self.music_queue.append(self.playing_song)
 
 			if song["Minecraft"] == False:
-				self.vc.play(discord.FFmpegOpusAudio(self.playing_song, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(murl, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
 			else:
-				self.vc.play(discord.FFmpegOpusAudio(self.playing_song), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(murl), after=lambda e: self.play_next())
 		else:
 			self.is_playing = False
 	
@@ -121,8 +121,8 @@ class music(Cog_Extension):
 	async def play_music(self, ctx):
 		if len(self.music_queue) > 0:
 			self.is_playing = True
-			song = self.music_queue[0]
-			self.playing_song = song['source']
+			self.playing_song = self.music_queue[0]
+			murl = self.playing_song['source']
 			self.music_queue.pop(0)
 
 			if self.vc is None or not self.vc.is_connected():
@@ -134,9 +134,9 @@ class music(Cog_Extension):
 				await self.connect_to_channel(ctx) #await self.vc.move_to(song['channel'])
 
 			if song["Minecraft"]:
-				self.vc.play(discord.FFmpegOpusAudio(self.playing_song), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(murl), after=lambda e: self.play_next())
 			else:
-				self.vc.play(discord.FFmpegOpusAudio(self.playing_song, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(murl, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
 		else:
 			self.is_playing = False
 
