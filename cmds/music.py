@@ -95,7 +95,7 @@ class music(Cog_Extension):
 			elif self.loop_mode == 2:
 				self.music_queue.append(self.playing_song)
 
-			if song["Minecraft"] == False:
+			if self.playing_son["Minecraft"] == False:
 				self.vc.play(discord.FFmpegOpusAudio(murl, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
 			else:
 				self.vc.play(discord.FFmpegOpusAudio(murl), after=lambda e: self.play_next())
@@ -133,7 +133,7 @@ class music(Cog_Extension):
 			else:
 				await self.connect_to_channel(ctx) #await self.vc.move_to(song['channel'])
 
-			if song["Minecraft"]:
+			if self.playing_son["Minecraft"]:
 				self.vc.play(discord.FFmpegOpusAudio(murl), after=lambda e: self.play_next())
 			else:
 				self.vc.play(discord.FFmpegOpusAudio(murl, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
