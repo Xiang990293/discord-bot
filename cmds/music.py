@@ -89,10 +89,10 @@ class music(Cog_Extension):
 			m_url = song['source']
 			self.music_queue.pop(0)
 
-			if self.loop_mode == 0:
-				self.music_queue.append(self.music_queue[0])
-			elif self.loop_mode == 1:
-				self.music_queue.insert(1, self.music_queue[0])
+			# if self.loop_mode == 0:
+			# 	self.music_queue.append(self.music_queue[0])
+			# elif self.loop_mode == 1:
+			# 	self.music_queue.insert(1, self.music_queue[0])
 
 			if song["Minecraft"] == False:
 				self.vc.play(discord.FFmpegOpusAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
