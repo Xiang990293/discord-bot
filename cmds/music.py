@@ -122,7 +122,7 @@ class music(Cog_Extension):
 		if len(self.music_queue) > 0:
 			self.is_playing = True
 			song = self.music_queue[0]
-			m_url = song['source']
+			self.playing_song = song['source']
 			self.music_queue.pop(0)
 
 			if self.vc is None or not self.vc.is_connected():
@@ -134,9 +134,9 @@ class music(Cog_Extension):
 				await self.connect_to_channel(ctx) #await self.vc.move_to(song['channel'])
 
 			if song["Minecraft"]:
-				self.vc.play(discord.FFmpegOpusAudio(m_url), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(self.playing_song), after=lambda e: self.play_next())
 			else:
-				self.vc.play(discord.FFmpegOpusAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(self.playing_song, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
 		else:
 			self.is_playing = False
 
