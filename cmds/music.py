@@ -83,22 +83,21 @@ class music(Cog_Extension):
 				except Exception:
 					return False
 
-	def play_next(self):
+	def play_next(self, previous_song):
+		if self.loop_mode == 1:
+			self.music_queue.insert(0, previous_song)
+		elif self.loop_mode == 2:
+			self.music_queue.append(previous_song)
+
 		if len(self.music_queue) > 0:
 			self.is_playing = True
 			self.playing_song = self.music_queue[0]
-			murl = self.playing_song['source']
 			self.music_queue.pop(0)
 
-			if self.loop_mode == 1:
-				self.music_queue.insert(1, self.playing_song)
-			elif self.loop_mode == 2:
-				self.music_queue.append(self.playing_song)
-
 			if self.playing_song["Minecraft"] == False:
-				self.vc.play(discord.FFmpegOpusAudio(murl, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(self.playing_song['source'], **self.FFMPEG_OPTIONS), after=lambda e=self.playing_song: self.play_next(e))
 			else:
-				self.vc.play(discord.FFmpegOpusAudio(murl), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(self.playing_song['source']), after=lambda e=self.playing_song: self.play_next(e))
 		else:
 			self.is_playing = False
 	
@@ -122,7 +121,6 @@ class music(Cog_Extension):
 		if len(self.music_queue) > 0:
 			self.is_playing = True
 			self.playing_song = self.music_queue[0]
-			murl = self.playing_song['source']
 			self.music_queue.pop(0)
 
 			if self.vc is None or not self.vc.is_connected():
@@ -134,9 +132,9 @@ class music(Cog_Extension):
 				await self.connect_to_channel(ctx) #await self.vc.move_to(song['channel'])
 
 			if self.playing_song["Minecraft"]:
-				self.vc.play(discord.FFmpegOpusAudio(murl), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(self.playing_song['source']), after=lambda e=self.playing_song: self.play_next(e))
 			else:
-				self.vc.play(discord.FFmpegOpusAudio(murl, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+				self.vc.play(discord.FFmpegOpusAudio(self.playing_song['source'], **self.FFMPEG_OPTIONS), after=lambda e=self.playing_song: self.play_next(e))
 		else:
 			self.is_playing = False
 
@@ -280,7 +278,7 @@ class music(Cog_Extension):
 		await ctx.message.delete()
 		if self.vc != None and self.vc:
 			self.vc.stop()
-			await self.play_music(ctx)
+			await self.play_next()
 
 	@commands.command(name='loop', aliases=['looping'], help="切換重複播放模式")
 	async def loop(self, ctx, *arg):
@@ -299,7 +297,7 @@ class music(Cog_Extension):
 					loop = "正常模式"
 				case 1:
 					loop = "單曲循環模式"
-					self.music_queue.insert(1, self.playing_song)
+					self.music_queue.insert(0, self.playing_song)
 				case 2:
 					loop = "播放列表循環模式"
 					self.music_queue.append(self.playing_song)
