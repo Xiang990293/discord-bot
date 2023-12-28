@@ -84,6 +84,8 @@ class music(Cog_Extension):
 					return False
 
 	def play_next(self, previous_song):
+		if previous_song != {'skip':True}:
+			previous_song = self.playing_song
 		if self.loop_mode == 1:
 			self.music_queue.insert(0, previous_song)
 		elif self.loop_mode == 2:
@@ -278,7 +280,7 @@ class music(Cog_Extension):
 		await ctx.message.delete()
 		if self.vc != None and self.vc:
 			self.vc.stop()
-			await self.play_next()
+			await self.play_next({'Skip':True})
 
 	@commands.command(name='loop', aliases=['looping'], help="切換重複播放模式")
 	async def loop(self, ctx, *arg):
