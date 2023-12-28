@@ -299,10 +299,8 @@ class music(Cog_Extension):
 					loop = "正常模式"
 				case 1:
 					loop = "單曲循環模式"
-					self.music_queue.insert(0, self.playing_song)
 				case 2:
 					loop = "播放列表循環模式"
-					self.music_queue.append(self.playing_song)
 			
 			await ctx.send(f"已切換為**{loop}**")
 
