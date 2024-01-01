@@ -6,7 +6,7 @@ import inspect
 
 MODE = 1
 
-bot = commands.Bot(command_prefix = '!!', intents=discord.Intents.all(), case_insensitive=True, self_bot=True)
+bot = commands.Bot(command_prefix = '\\', intents=discord.Intents.all(), case_insensitive=True, self_bot=True)
 
 @bot.event
 async def on_ready():
