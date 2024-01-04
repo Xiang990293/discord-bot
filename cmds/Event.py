@@ -27,7 +27,7 @@ class Event(Cog_Extension):
 
 	@commands.Cog.listener()
 	async def on_message(self, msg):
-		if msg.content in '!!':
+		if msg.content.startswith('!!'):
 			await msg.delete()
 			await msg.channel.send("現在指令前綴已經更改為\\，請將原本的!!改成\\後再試一次")
 		elif 'ji394su3' in msg.content:
