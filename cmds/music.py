@@ -146,6 +146,7 @@ class music(Cog_Extension):
 
 		vchannel = ctx.author.voice.channel
 
+		#檢測使用者是否在語音頻道
 		if self.vc is None:
 			self.vc = await vchannel.connect()
 		elif self.is_paused:
@@ -156,6 +157,7 @@ class music(Cog_Extension):
 			limit = 20
 
 		if "https://" not in args[0]:
+			args = args.replace("「"," ").replace("」"," ") #原本不知為何加了「」會報錯
 			query = " ".join(args)
 			search = self.search_yt(query, True)
 			
@@ -312,9 +314,11 @@ class music(Cog_Extension):
 			await ctx.send("目前清單中沒有任何歌曲")
 			return
 		else:
-			retval = "播放清單：```"
-			for i in self.music_queue:
-				retval += i['title'] + "\n"
+			retval = "正在播放：\n```"
+			retval += self.playing_song['title']
+			retval += "```\n播放清單：```"
+			for i in range(len(self.music_queue)):
+				retval += i+1 + "." + self.music_queue[i]['title'] + "\n"
 			retval += "```"
 			await ctx.send(retval)
 
