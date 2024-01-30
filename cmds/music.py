@@ -157,7 +157,6 @@ class music(Cog_Extension):
 			limit = 20
 
 		if "https://" not in args[0]:
-			(1,2).count()
 			for i in range(len(args)):
 				args[i] = args[i].replace("「"," ").replace("」"," ") #原本不知為何加了「」會報錯
 			query = " ".join(args)
