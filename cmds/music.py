@@ -157,10 +157,10 @@ class music(Cog_Extension):
 			limit = 20
 
 		if "https://" not in args[0]:
-			# temp = []
-			# for i in args:
-			# 	temp += i.replace("「"," ").replace("」"," ") #原本不知為何加了「」會報錯
-			# args = tuple(temp)
+			temp = []
+			for i in args:
+				temp += i.replace("「","").replace("」","") #原本不知為何加了「」會報錯
+			args = tuple(temp)
 			query = " ".join(args)
 			search = self.search_yt(query, True)
 			
@@ -321,7 +321,7 @@ class music(Cog_Extension):
 			retval += self.playing_song['title']
 			retval += "```\n播放清單：```"
 			for i in range(len(self.music_queue)):
-				retval += i+1 + "." + self.music_queue[i]['title'] + "\n"
+				retval += str(i+1) + "." + self.music_queue[i]['title'] + "\n"
 			retval += "```"
 			await ctx.send(retval)
 
