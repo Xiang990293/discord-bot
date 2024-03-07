@@ -10,7 +10,7 @@ kill_signal = "SIGINT"
 builtin = "python"
 [experimental]
 allowed_public_ports = []
-auto_rollback = ture
+auto_rollback = "ture"
 [[services]]
 internal_port = 8080
 protocol = "tcp"
