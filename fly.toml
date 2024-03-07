@@ -16,7 +16,3 @@ kill_signal = "SIGINT"
 [[services]]
 	internal_port = 8080
 	protocol = "tcp"
-	[services.concurrency]
-	hard_limit = 25
-	soft_limit = 20
-	type = "connections"
