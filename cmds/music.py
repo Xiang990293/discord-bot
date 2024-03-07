@@ -5,6 +5,7 @@ from yt_dlp import YoutubeDL
 import os
 import inspect
 import threading
+import aiohttp
 
 class music(Cog_Extension):
 	def __init__(self, bot):
@@ -173,7 +174,7 @@ class music(Cog_Extension):
 
 			self.amount -= 1
 
-			self.bot.loop.create_task(ctx.send(f"下載期限為30天", delete_after=30))
+			# self.bot.loop.create_task(ctx.send(f"下載期限為30天", delete_after=30))
 
 		if ctx.author.bot:
 			await ctx.send(f"嗶啵！啵嗶。機器人！")
@@ -217,9 +218,9 @@ class music(Cog_Extension):
 			search = self.search_yt(query, True)
 			
 			if type(search) == type(True):
-				await ctx.send(f"```{args}```\n無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
+				await ctx.send(f"```{temp}```\n無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
 			else:
-				await ctx.send(f"```{args}```\n搜尋結果已經加入此播放清單之中：{search['title']}")
+				await ctx.send(f"```{temp}```\n搜尋結果已經加入此播放清單之中：{search['title']}")
 
 				# res = "```"
 				# for i in search:

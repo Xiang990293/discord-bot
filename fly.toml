@@ -5,3 +5,16 @@
 
 app = "minecraft-discord-bot"
 primary_region = "hkg"
+kill_signal = "SIGINT"
+[build]
+builtin = "python"
+[experimental]
+allowed_public_ports = []
+auto_rollback = ture
+[[services]]
+internal_port = 8080
+protocol = "tcp"
+[services.concurrency]
+hard_limit = 25
+soft_limit = 20
+type = "connections"
