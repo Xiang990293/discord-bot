@@ -15,13 +15,13 @@ class Event(Cog_Extension):
 	
 	@commands.Cog.listener()
 	async def on_member_join(self, member):
-		channel = self.bot.get_channel(int(jdata['leave_channel_id']))
+		channel = self.bot.get_channel(int(jdata['welcome_channel_id']))
 		print(f'{member}! 歡迎你的加入!')
 		await channel.send(f'{member}! 歡迎你的加入!')
 
 	@commands.Cog.listener()
-	async def on_member_join(self,member):
-		channel = self.bot.get_channel(int(jdata['welcome_channel_id']))
+	async def on_member_leave(self,member):
+		channel = self.bot.get_channel(int(jdata['leave_channel_id']))
 		print(f'{member}! 希望你會永遠記得我們!')
 		await channel.send(f'{member}! 希望你會永遠記得我們!')
 

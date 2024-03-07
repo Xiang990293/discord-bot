@@ -4,6 +4,7 @@ from core.classes import Cog_Extension
 from yt_dlp import YoutubeDL
 import os
 import inspect
+import threading
 
 class music(Cog_Extension):
 	def __init__(self, bot):
@@ -14,6 +15,11 @@ class music(Cog_Extension):
 		self.is_paused = False
 		self.loop_mode = 0
 		self.playing_song = {}
+		self.amount = 0
+		self.options = {
+			'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+			'outtmpl': f'temp_file/download_{self.amount}.%(ext)s'
+		}
 
 		self.music_queue = []
 		self.YDL_OPTIONS = {"format":"bestaudio", "noplaylist":"True"}
@@ -139,6 +145,52 @@ class music(Cog_Extension):
 				self.vc.play(discord.FFmpegOpusAudio(self.playing_song['source'], **self.FFMPEG_OPTIONS), after=lambda e=self.playing_song: self.play_next(e))
 		else:
 			self.is_playing = False
+
+	@commands.command(name='download', aliases=['dl'], help="下載並傳送提供之網址的影片/歌曲")
+	async def download(self, ctx, url):
+		await ctx.message.delete()
+		
+		def is_url_available(url):
+			try:
+				with YoutubeDL() as ydl:
+					ydl.extract_info(url, download=False)
+				return True
+			except ydl.utils.DownloadError:
+				return False
+		
+		def download_video(url, options):
+			with YoutubeDL(options) as ydl:
+				info_dict = ydl.extract_info(url, download=True)
+				filename = ydl.prepare_filename(info_dict)
+
+			# Send the message with the download URL
+			self.bot.loop.create_task(ctx.send("下載結果: "))
+
+			self.bot.loop.create_task(ctx.send(file=filename))
+
+			# Delete the downloaded file
+			os.remove(filename)
+
+			self.amount -= 1
+
+			self.bot.loop.create_task(ctx.send(f"下載期限為30天", delete_after=30))
+
+		if ctx.author.bot:
+			await ctx.send(f"嗶啵！啵嗶。機器人！")
+		else:
+			if self.amount == 0:
+				self.amount += 1
+				await ctx.send(f"```{url}```\n正在檢查連結是否可用...")
+				if is_url_available(url):
+					await ctx.send(f"正在下載： {url}")
+					thread = threading.Thread(target=download_video, args=(url, self.options))
+					thread.start()
+				else:
+					await ctx.send("```{url}```\n影片連結不可用")
+					self.amount == 0
+				
+			else:
+				await ctx.send("目前在下載其他影片...")
 
 	@commands.command(name='play', aliases=['p', 'playing'], help="播放所選的Youtube歌曲")
 	async def play(self, ctx, *args, limit=10):
