@@ -10,7 +10,7 @@ primary_region = "hkg"
 	builtin = "python"
 [experimental]
 	allowed_public_ports = [12345]
-	auto_rollback = ture
+	auto_rollback = true
 [[services]]
 	internal_port = 8080
 	protocol = "tcp"
