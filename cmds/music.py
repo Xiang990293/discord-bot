@@ -165,9 +165,9 @@ class music(Cog_Extension):
 			search = self.search_yt(query, True)
 			
 			if type(search) == type(True):
-				await ctx.send("無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
+				await ctx.send(f"```{args}```\n無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
 			else:
-				await ctx.send(f"搜尋結果已經加入此播放清單之中：{search['title']}")
+				await ctx.send(f"```{args}```\n搜尋結果已經加入此播放清單之中：{search['title']}")
 
 				# res = "```"
 				# for i in search:
@@ -244,6 +244,15 @@ class music(Cog_Extension):
 			await ctx.send("```await "+arg+"```\n"+str(await res))
 		else:
 			await ctx.send("```"+arg+"```\n"+str(res))
+
+	@commands.command(name='searching_test', aliases=['stest', 'searchtest'], help="播放所選的Youtube歌曲")
+	async def searching_test(self, ctx, *, arg):
+		temp = []
+		for i in args:
+			temp += i.replace("「","").replace("」","") #原本不知為何加了「」會報錯
+		args = tuple(temp)
+		query = " ".join(args)
+		await ctx.send("```"+arg+"```\n"+str(query)+"'")
 
 	@commands.command(name='join', aliases=['jion'], help="加入語音頻道")
 	async def join(self, ctx):
