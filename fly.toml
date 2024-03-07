@@ -6,8 +6,6 @@
 app = "minecraft-discord-bot"
 primary_region = "hkg"
 
-kill_signal = "SIGINT"
-
 [build]
 	builtin = "python"
 [experimental]
