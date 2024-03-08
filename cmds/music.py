@@ -6,6 +6,7 @@ import os
 import inspect
 import threading
 import aiohttp
+from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 class music(Cog_Extension):
 	def __init__(self, bot):
@@ -21,6 +22,12 @@ class music(Cog_Extension):
 			'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
 			'outtmpl': f'temp_file/download_{self.amount}.%(ext)s'
 		}
+		
+		self.HandlerClass = SimpleHTTPRequestHandler
+		self.ServerClass  = http.server.HTTPServer
+		self.Protocol     = "HTTP/1.0"
+		self.PORT		  = 8080
+		self.DIRECTORY    = "/temp_file"
 
 		self.music_queue = []
 		self.YDL_OPTIONS = {"format":"bestaudio", "noplaylist":"True"}
@@ -125,6 +132,11 @@ class music(Cog_Extension):
 	def queue_append(self, query, isMinecraft = False):
 		self.music_queue.append({'source': query['source'], 'Minecraft': isMinecraft, 'title':query['title']})
 		return self.music_queue
+	
+	def start_http_server(self):
+		server_address = ('', self.PORT)  # Port 8080 for serving files
+		httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
+		httpd.serve_forever()
 
 	async def play_music(self, ctx):
 		if len(self.music_queue) > 0:
@@ -163,11 +175,17 @@ class music(Cog_Extension):
 			with YoutubeDL(options) as ydl:
 				info_dict = ydl.extract_info(url, download=True)
 				filename = ydl.prepare_filename(info_dict)
+				file_path = os.path.join("files", filename)
 
 			# Send the message with the download URL
 			self.bot.loop.create_task(ctx.send("下載結果: "))
 
 			self.bot.loop.create_task(ctx.send(file=filename))
+
+			if os.path.exists(file_path):
+				self.bot.loop.create_task(ctx.send(f"Download the file from: http://{os.getenv('minecraft-discord-bot')}.fly.dev:8080/temp_file/{filename}"))
+			else:
+				self.bot.loop.create_task(ctx.send("File not found."))
 
 			# Delete the downloaded file
 			os.remove(filename)

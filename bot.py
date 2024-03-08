@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import sys
+import http.server
+import socketserver
+from http.server import SimpleHTTPRequestHandler
 import discord
 from discord.ext import commands
 import functions.get_jdata as getj

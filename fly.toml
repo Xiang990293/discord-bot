@@ -17,12 +17,17 @@ kill_signal = "SIGINT"
 
 [[services]]
 	internal_port = 8080
+	protocol = "tcp"
+
+[[services.ports]]
+	handlers = ["http"]
+	port = "443"
 
 [http.services]
 	[http.services.bot]
 		handle = "discord-bot"
 		routes = ["/*"]
-		internal_port = 8080
+		internal_port = 443
 
 	[http.services.file]
 		handle = "file-server"
