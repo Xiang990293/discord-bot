@@ -13,10 +13,10 @@ kill_signal = "SIGINT"
 	allowed_public_ports = []
 	auto_rollback = true
 [[services]]
-	internal_port = 8080
+	internal_port = 443
 
 [[services]]
-	internal_port = 8081
+	internal_port = 8080
 
 [http.services]
 	[http.services.bot]
@@ -26,11 +26,11 @@ kill_signal = "SIGINT"
 
 	[http.services.file]
 		handle = "file-server"
-		routes = ["/*"]
-		internal_port = 8081
+		routes = ["temp_file/*"]
+		internal_port = 8080
 
 	[http.services.bot.ports]
-	http = 8080
+	http = 433
 
 	[http.services.file.ports]
-	http = 8081
+	http = 8080
