@@ -24,7 +24,7 @@ class music(Cog_Extension):
 		}
 		
 		self.HandlerClass = SimpleHTTPRequestHandler
-		self.ServerClass  = http.server.HTTPServer
+		self.ServerClass  = HTTPServer
 		self.Protocol     = "HTTP/1.0"
 		self.PORT		  = 8080
 		self.DIRECTORY    = "/temp_file"
