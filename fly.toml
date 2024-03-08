@@ -5,37 +5,3 @@
 
 app = "minecraft-discord-bot"
 primary_region = "hkg"
-kill_signal = "SIGINT"
-
-[build]
-	builtin = "python"
-[experimental]
-	allowed_public_ports = []
-	auto_rollback = true
-[[services]]
-	internal_port = 443
-
-[[services]]
-	internal_port = 8080
-	protocol = "tcp"
-
-[[services.ports]]
-	handlers = ["http"]
-	port = "443"
-
-[http.services]
-	[http.services.bot]
-		handle = "discord-bot"
-		routes = ["/*"]
-		internal_port = 443
-
-	[http.services.file]
-		handle = "file-server"
-		routes = ["temp_file/*"]
-		internal_port = 8080
-
-	[http.services.bot.ports]
-	http = 433
-
-	[http.services.file.ports]
-	http = 8080
