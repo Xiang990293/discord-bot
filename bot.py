@@ -106,4 +106,4 @@ async def bot_test(ctx, *, arg):
 		await ctx.send("```"+arg+"```\n"+ str(res))
 
 if __name__ == "__main__":
-	bot.run(getj.get_jdata(MODE)["token"])
+	bot.run(getj.get_jdata(MODE)["token"], port=8080)
