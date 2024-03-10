@@ -159,7 +159,7 @@ class music(Cog_Extension):
 		await ctx.message.delete()
 		
 		def start_http_server():
-			server_address = ('', 8080)  # Port 8080 for serving files
+			server_address = ('0.0.0.0', 8080)  # Port 8080 for serving files
 			httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
 			httpd.serve_forever()
 		
