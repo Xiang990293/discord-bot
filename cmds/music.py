@@ -158,8 +158,8 @@ class music(Cog_Extension):
 	async def download(self, ctx, url):
 		await ctx.message.delete()
 		
-		def start_http_server(self):
-			server_address = ('', self.PORT)  # Port 8080 for serving files
+		def start_http_server():
+			server_address = ('', 8080)  # Port 8080 for serving files
 			httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
 			httpd.serve_forever()
 		
@@ -175,20 +175,19 @@ class music(Cog_Extension):
 			with YoutubeDL(options) as ydl:
 				info_dict = ydl.extract_info(url, download=True)
 				filename = ydl.prepare_filename(info_dict)
-				file_path = os.path.join("files", filename)
 
-			# Send the message with the download URL
-			self.bot.loop.create_task(ctx.send("下載結果: "))
 
-			self.bot.loop.create_task(ctx.send(file=filename))
+			# self.bot.loop.create_task(ctx.send(file=filename))
 
-			if os.path.exists(file_path):
-				self.bot.loop.create_task(ctx.send(f"Download the file from: http://{os.getenv('minecraft-discord-bot')}.fly.dev:8080/temp_file/{filename}"))
+			if os.path.exists(filename):
+				# Send the message with the download URL
+				self.bot.loop.create_task(ctx.send("下載結果: "))
+				self.bot.loop.create_task(ctx.send(f"http://{os.getenv('minecraft-discord-bot')}.fly.dev:8080/{filename}"))
 			else:
-				self.bot.loop.create_task(ctx.send("File not found."))
+				self.bot.loop.create_task(ctx.send("找不到下載檔案。"))
 
 			# Delete the downloaded file
-			os.remove(filename)
+			# os.remove(filename)
 
 			self.amount -= 1
 
@@ -204,7 +203,7 @@ class music(Cog_Extension):
 					await ctx.send(f"正在下載： {url}")
 					thread = threading.Thread(target=download_video, args=(url, self.options))
 					thread.start()
-					threading.Thread(target=start_http_server, args=(self)).start()
+					threading.Thread(target=start_http_server).start()
 				else:
 					await ctx.send("```{url}```\n影片連結不可用")
 					self.amount == 0
