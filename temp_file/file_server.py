@@ -8,7 +8,7 @@ from http.server import SimpleHTTPRequestHandler
 HandlerClass = SimpleHTTPRequestHandler
 ServerClass  = http.server.HTTPServer
 Protocol     = "HTTP/1.0"
-PORT		 = 8081
+PORT		 = 1346
 DIRECTORY    = "/temp_file"
 
 # if sys.argv[1:]:
@@ -26,6 +26,6 @@ DIRECTORY    = "/temp_file"
 
 Handler = http.server.SimpleHTTPRequestHandler
 
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
+with socketserver.TCPServer(("::", PORT), Handler) as httpd:
 	print("serving HTTP server at port", PORT)
 	httpd.serve_forever()
