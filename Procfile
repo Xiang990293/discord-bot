@@ -1,2 +1,2 @@
-bot: python bot.py
-file: python temp_file/file_server.py
+bot: python /bot/bot.py
+file: python /bot/temp_file/file_server.py
