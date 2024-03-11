@@ -11,4 +11,4 @@ COPY start.sh /bot/
 RUN chmod +x /bot/start.sh
 # CMD ["overmind", "start"]
 CMD python bot.py
-# CMD ["/bot/start.sh"]
+# CMD ["start.sh"]
