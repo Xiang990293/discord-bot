@@ -9,4 +9,3 @@ primary_region = "hkg"
 [processes]
 file = "temp_file/file_server.py"
 bot = "bot.py"
-
