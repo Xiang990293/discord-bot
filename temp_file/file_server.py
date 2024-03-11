@@ -26,6 +26,6 @@ DIRECTORY    = "/temp_file"
 
 Handler = http.server.SimpleHTTPRequestHandler
 
-with socketserver.TCPServer(("::", PORT), Handler) as httpd:
+with socketserver.TCPServer(("0.0.0.0", PORT), Handler) as httpd:
 	print("serving HTTP server at port", PORT)
 	httpd.serve_forever()
