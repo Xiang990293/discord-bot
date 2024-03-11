@@ -8,7 +8,7 @@ from http.server import SimpleHTTPRequestHandler
 HandlerClass = SimpleHTTPRequestHandler
 ServerClass  = http.server.HTTPServer
 Protocol     = "HTTP/1.0"
-PORT		 = 1346
+PORT		 = 8080
 DIRECTORY    = "/temp_file"
 
 # if sys.argv[1:]:
