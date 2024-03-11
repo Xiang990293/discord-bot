@@ -7,8 +7,8 @@ RUN apt-get update && apt-get install -y ffmpeg libavcodec-extra libssl-dev liba
 # RUN GO111MODULE=on go get -u github.com/DarthSim/overmind/v2
 RUN pip install pipenv
 ADD Procfile /bot/
-COPY start.sh /app/
-RUN chmod +x /app/start.sh
+COPY start.sh /bot/
+RUN chmod +x /bot/start.sh
 # CMD ["overmind", "start"]
 # CMD python bot.py
 CMD ["/bot/start.sh"]
