@@ -158,6 +158,11 @@ class music(Cog_Extension):
 	async def download(self, ctx, url):
 		await ctx.message.delete()
 		
+		def start_http_server():
+			server_address = ('0.0.0.0', 8080)  # Port 1346 for serving files
+			httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
+			httpd.serve_forever()
+		
 		def is_url_available(url):
 			try:
 				with YoutubeDL() as ydl:
@@ -198,6 +203,8 @@ class music(Cog_Extension):
 					await ctx.send(f"正在下載： {url}")
 					thread = threading.Thread(target=download_video, args=(url, self.options))
 					thread.start()
+					thread_file = threading.Thread(target=start_http_server)
+					thread_file.start()
 				else:
 					await ctx.send("```{url}```\n影片連結不可用")
 					self.amount == 0
