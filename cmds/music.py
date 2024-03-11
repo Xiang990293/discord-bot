@@ -159,7 +159,7 @@ class music(Cog_Extension):
 		await ctx.message.delete()
 		
 		def start_http_server():
-			server_address = ('0.0.0.0', 8080)  # Port 8080 for serving files
+			server_address = ('::', 1346)  # Port 1346 for serving files
 			httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
 			httpd.serve_forever()
 		
@@ -182,7 +182,7 @@ class music(Cog_Extension):
 			if os.path.exists(filename):
 				# Send the message with the download URL
 				self.bot.loop.create_task(ctx.send("下載結果: "))
-				self.bot.loop.create_task(ctx.send(f"http://{os.getenv('minecraft-discord-bot')}.fly.dev:8080/{filename}"))
+				self.bot.loop.create_task(ctx.send(f"http://{os.getenv('minecraft-discord-bot')}.fly.dev:1346/{filename}"))
 			else:
 				self.bot.loop.create_task(ctx.send("找不到下載檔案。"))
 
@@ -234,6 +234,8 @@ class music(Cog_Extension):
 			args = tuple(temp)
 			query = " ".join(args)
 			search = self.search_yt(query, True)
+
+			temp = str(temp).replace("'","").replace(",","").replace("[","").replace("]","").replace(" ","")
 			
 			if type(search) == type(True):
 				await ctx.send(f"```{temp}```\n無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
