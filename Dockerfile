@@ -9,6 +9,7 @@ RUN pip install pipenv
 ADD Procfile /bot/
 COPY start.sh /bot/
 RUN chmod +x /bot/start.sh
+RUN chmod +x /bot/bot.py
 # CMD ["overmind", "start"]
 CMD python bot.py
 # CMD ["start.sh"]
