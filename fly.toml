@@ -10,12 +10,25 @@ primary_region = "hkg"
 file = "/bot/temp_file/file_server.py"
 bot = "/bot/bot.py"
 
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = "80"
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = "443"
+
 [http_service]
   processes = ["file"]
   internal_port = 8080
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
+  protocol = "https"
   min_machines_running = 0
 
   [http_service.concurrency]
