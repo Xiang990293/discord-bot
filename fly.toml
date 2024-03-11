@@ -24,10 +24,3 @@ bot = "/bot"
   internal_port = 1346
   protocol = "http"
   script_checks = []
-
-[[services]]
-  processes = ["bot"] # this service only applies to the web process
-  http_checks = []
-  internal_port = 8080
-  protocol = "http"
-  script_checks = []
