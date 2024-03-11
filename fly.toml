@@ -12,6 +12,20 @@ bot = "/bot/bot.py"
 
 
 [http_service]
+  processes = ["bot"]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  protocol = "https"
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 200
+    hard_limit = 250
+
+[http_service]
   processes = ["file"]
   internal_port = 8080
   force_https = true
