@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y ffmpeg libavcodec-extra libssl-dev liba
 RUN pip install pipenv
 ADD Procfile /bot/
 COPY start.sh /bot/
-RUN chmod +x /start.sh
+RUN chmod +x /bot/start.sh
 # CMD ["overmind", "start"]
 # CMD python bot.py
-CMD ["/start.sh"]
+CMD ["/bot/start.sh"]
