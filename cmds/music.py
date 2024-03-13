@@ -154,14 +154,9 @@ class music(Cog_Extension):
 		else:
 			self.is_playing = False
 
-	@commands.command(name='download', aliases=['dl'], help="下載並傳送提供之網址的影片/歌曲")
-	async def download(self, ctx, url):
+	@commands.command(name='download_video', aliases=['dv','downv','dvid'], help="下載並傳送提供之網址的影片/歌曲")
+	async def download_video(self, ctx, url):
 		await ctx.message.delete()
-		
-		def start_http_server():
-			server_address = ('0.0.0.0', 8080)  # Port 8080 for serving files
-			httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
-			httpd.serve_forever()
 		
 		def is_url_available(url):
 			try:
@@ -203,8 +198,6 @@ class music(Cog_Extension):
 					await ctx.send(f"正在下載： {url}")
 					thread = threading.Thread(target=download_video, args=(url, self.options))
 					thread.start()
-					thread_file = threading.Thread(target=start_http_server)
-					thread_file.start()
 				else:
 					await ctx.send("```{url}```\n影片連結不可用")
 					self.amount == 0

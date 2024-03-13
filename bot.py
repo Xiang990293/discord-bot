@@ -9,11 +9,21 @@ from discord.ext import commands
 import functions.get_jdata as getj
 import os
 import inspect
+import threading
 
-MODE = 1
+MODE = 0
 # mode = {"run": 1, "debug": 0}
 
 bot = commands.Bot(command_prefix = '\\', intents=discord.Intents.all(), case_insensitive=True, self_bot=True)
+
+class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory='./temp_file', **kwargs)
+
+def start_http_server():
+    with socketserver.TCPServer(("0.0.0.0", 8080), MyHTTPRequestHandler) as httpd:
+        print("HTTP server running on port 8080...")
+        httpd.serve_forever()
 
 @bot.event
 async def on_ready():
@@ -113,4 +123,7 @@ async def bot_test(ctx, *, arg):
 		await ctx.send("```"+arg+"```\n"+ str(res))
 
 if __name__ == "__main__":
+	http_thread = threading.Thread(target=start_http_server)
+	http_thread.start()
+
 	bot.run(getj.get_jdata(MODE)["token"])
