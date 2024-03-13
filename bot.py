@@ -11,7 +11,7 @@ import os
 import inspect
 import threading
 
-MODE = 0
+MODE = 1
 # mode = {"run": 1, "debug": 0}
 
 bot = commands.Bot(command_prefix = '\\', intents=discord.Intents.all(), case_insensitive=True, self_bot=True)
@@ -34,6 +34,9 @@ async def on_ready():
 			print(f'載入 cmds.{filename[:-3]} 完成!')
 			await bot.load_extension(f'cmds.{filename[:-3]}')
 	print(f'載入完成!')
+
+	http_thread = threading.Thread(target=start_http_server)
+	http_thread.start()
 
 
 @bot.command()
@@ -123,7 +126,4 @@ async def bot_test(ctx, *, arg):
 		await ctx.send("```"+arg+"```\n"+ str(res))
 
 if __name__ == "__main__":
-	http_thread = threading.Thread(target=start_http_server)
-	http_thread.start()
-
 	bot.run(getj.get_jdata(MODE)["token"])
