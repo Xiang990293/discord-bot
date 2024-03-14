@@ -25,4 +25,4 @@ def get_jdata_with_key(key, mode):
 			return json.load(jfile)
 		else:
 			jdatat = json.load(jfile)
-			return jdatat[key]
+			return os.environ.get(jdatat[key])

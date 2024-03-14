@@ -7,8 +7,8 @@ app = "minecraft-discord-bot"
 primary_region = "hkg"
 
 [processes]
-file = "/bot/functions/file_server.py"
 bot = "/bot/bot.py"
+file = "/bot/functions/file_server.py"
 
 
 [http_service]
