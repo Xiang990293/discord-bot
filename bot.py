@@ -11,7 +11,7 @@ import os
 import inspect
 import threading
 
-MODE = 0
+MODE = 1
 # mode = {"debug": 0, "run": 1}
 
 bot = commands.Bot(command_prefix = '\\', intents=discord.Intents.all(), case_insensitive=True, self_bot=True)
