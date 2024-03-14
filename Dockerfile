@@ -12,5 +12,5 @@ RUN chmod +x /bot/start.sh
 RUN chmod +x /bot/bot.py
 RUN chmod +x /bot/functions/file_server.py
 # CMD ["overmind", "start"]
-# CMD python bot.py
-CMD start.sh
+CMD python bot.py
+# CMD start.sh
