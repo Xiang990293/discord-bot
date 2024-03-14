@@ -9,7 +9,7 @@ from bot import MODE
 
 PATH = ["127.0.0.1","minecraft-discord-bot.fly.dev"]
 FLY_API_HOSTNAME = "https://minecraft-discord-bot.fly.dev"
-FLY_API_TOKEN = getj.get_jdata_with_key("FLY_API_TOKEN", MODE)
+FLY_API_TOKEN = getj.get_jdata_with_key("fly_api_token", MODE)
 VOLUME_ID = getj.get_jdata_with_key("volume_id", MODE)
 UPLOAD_URL = f"{FLY_API_HOSTNAME}/v1/apps/minecraft-discord-bot/volumes/{VOLUME_ID}"
 
