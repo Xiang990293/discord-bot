@@ -12,22 +12,26 @@ FLY_API_HOSTNAME = "https://minecraft-discord-bot.fly.dev"
 FLY_API_TOKEN = getj.get_jdata_with_key("fly_api_token", MODE)
 VOLUME_ID = getj.get_jdata_with_key("volume_id", MODE)
 UPLOAD_URL = f"{FLY_API_HOSTNAME}/v1/apps/minecraft-discord-bot/volumes/{VOLUME_ID}"
+UPLOAD_DIR = f"/v1/apps/minecraft-discord-bot/volumes/{VOLUME_ID}"
 
 class file(Cog_Extension):
 	def __init__(self, bot):
 		Cog_Extension.__init__(self, bot)
 
 	async def upload_file(self, file, name):
-		headers = {
-			"Authorization": f"Bearer {FLY_API_TOKEN}",
-			"Content-Type": "application/octet-stream"
-		}
-		files = {"file": (name, file)}
-		response = requests.post(UPLOAD_URL, files=files, headers=headers)
-		print(response.text)
+		# headers = {
+		# 	"Authorization": f"Bearer {FLY_API_TOKEN}",
+		# 	"Content-Type": "application/octet-stream"
+		# }
+		file_path = os.path.join(UPLOAD_DIR, name)  # Define the file path within the volume
+		with open(file_path, "wb") as f:
+			f.write(file)
+		# files = {"file": (name, file)}
+		# response = requests.post(UPLOAD_DIR, files=files, headers=headers)
+		# print(response.text)
 
 	def download_file(self, file_name):
-		response = requests.get(UPLOAD_URL)
+		response = requests.get(UPLOAD_DIR)
 		if response.status_code == 200:
 			with open(file_name, "wb") as f:
 				f.write(response.content)
@@ -41,7 +45,7 @@ class file(Cog_Extension):
 		}
 
 		try:
-			response = requests.get(UPLOAD_URL, headers=headers)
+			response = requests.get(UPLOAD_DIR, headers=headers)
 			if response.status_code == 200:
 				return response.content
 			else:
