@@ -6,12 +6,10 @@
 app = "minecraft-discord-bot"
 primary_region = "hkg"
 
-[processes]
-bot = "/bot/bot.py"
 
 
 [http_service]
-  processes = ["bot"]
+  
   internal_port = 8080
   force_https = true
   auto_stop_machines = true
