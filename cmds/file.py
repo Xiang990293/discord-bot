@@ -12,7 +12,7 @@ FLY_API_HOSTNAME = "https://minecraft-discord-bot.fly.dev"
 FLY_API_TOKEN = getj.get_jdata_with_key("fly_api_token", MODE)
 VOLUME_ID = getj.get_jdata_with_key("volume_id", MODE)
 UPLOAD_URL = f"{FLY_API_HOSTNAME}/v1/apps/minecraft-discord-bot/volumes/{VOLUME_ID}"
-UPLOAD_DIR = f"/v1/apps/minecraft-discord-bot/volumes/{VOLUME_ID}"
+UPLOAD_DIR = f"/temp_file/volume"
 
 class file(Cog_Extension):
 	def __init__(self, bot):
