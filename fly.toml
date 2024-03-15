@@ -8,7 +8,6 @@ primary_region = "hkg"
 
 [processes]
 bot = "/bot/bot.py"
-file = "/bot/functions/file_server.py"
 
 
 [http_service]
