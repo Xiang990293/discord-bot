@@ -169,12 +169,12 @@ class music(Cog_Extension):
 		def download_video(url, options):
 			with YoutubeDL(options) as ydl:
 				info_dict = ydl.extract_info(url, download=True)
-				filename = ydl.prepare_filename(info_dict)
+				filename = ydl.prepare_filename(f"info_dict")
 
 
 			# self.bot.loop.create_task(ctx.send(file=filename))
 
-			if os.path.exists(filename):
+			if os.path.exists(f"/bot{filename}"):
 				# Send the message with the download URL
 				self.bot.loop.create_task(ctx.send("下載結果: "))
 				self.bot.loop.create_task(ctx.send(f"http://minecraft-discord-bot.fly.dev/{filename}"))
@@ -184,7 +184,7 @@ class music(Cog_Extension):
 			# Delete the downloaded file
 			# os.remove(filename)
 
-			self.amount -= 1
+			# self.amount -= 1
 
 			# self.bot.loop.create_task(ctx.send(f"下載期限為30天", delete_after=30))
 
@@ -195,7 +195,7 @@ class music(Cog_Extension):
 				self.amount += 1
 				await ctx.send(f"```{url}```\n正在檢查連結是否可用...")
 				if is_url_available(url):
-					await ctx.send(f"正在下載： {url}")
+					await ctx.send(f"正在下載，請稍後...")
 					thread = threading.Thread(target=download_video, args=(url, self.options))
 					thread.start()
 				else:
