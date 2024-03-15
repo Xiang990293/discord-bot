@@ -6,14 +6,16 @@
 app = "minecraft-discord-bot"
 primary_region = "hkg"
 
-
+[mounts]
+source="file_server"
+destination="/temp_file/volume"
 
 [http_service]
   
   internal_port = 8080
   force_https = true
   auto_stop_machines = false
-  auto_start_machines = flase
+  auto_start_machines = false
   protocol = "https"
   min_machines_running = 0
 
