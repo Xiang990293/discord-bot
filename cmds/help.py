@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from core.classes import Cog_Extension
 
-class help(Cog_Extension):
+class Help(Cog_Extension):
 	def __init__(self, bot):
 		Cog_Extension.__init__(self, bot)
 
@@ -37,4 +37,4 @@ class help(Cog_Extension):
 		await ctx.send(self.help_message)
 
 async def setup(bot):
-	await bot.add_cog(help(bot))
+	await bot.add_cog(Help(bot))

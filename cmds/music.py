@@ -7,8 +7,9 @@ import inspect
 import threading
 import aiohttp
 from http.server import SimpleHTTPRequestHandler, HTTPServer
+import ast
 
-class music(Cog_Extension):
+class Music(Cog_Extension):
 	def __init__(self, bot):
 		Cog_Extension.__init__(self, bot)
 
@@ -206,7 +207,7 @@ class music(Cog_Extension):
 				await ctx.send("目前在下載其他影片...")
 
 	@commands.command(name='play', aliases=['p', 'playing'], help="播放所選的Youtube歌曲")
-	async def play(self, ctx, *args, limit=10):
+	async def play(self, ctx, *, arg, limit=10):
 		await ctx.message.delete()
 
 		vchannel = ctx.author.voice.channel
@@ -221,20 +222,19 @@ class music(Cog_Extension):
 			await ctx.send("無法容納過大上限之播放清單，上限將下調至 20")
 			limit = 20
 
-		if "https://" not in args[0]:
-			temp = []
-			for i in args:
-				temp += i.replace("「","").replace("」","") #原本不知為何加了「」會報錯
-			args = tuple(temp)
+		if "https://" not in args[0] & args[0].startswith('https://'):
+			
+			search_str = arg
+			cleaned_arg = [word.replace("「","").replace("」","") for word in arg.split()] #原本不知為何加了「」會報錯
+			args = tuple(cleaned_arg)
 			query = " ".join(args)
-			search = self.search_yt(query, True)
 
-			temp = str(temp).replace("'","").replace(",","").replace("[","").replace("]","").replace(" ","")
+			search = self.search_yt(query, True)
 			
 			if type(search) == type(True):
-				await ctx.send(f"```{temp}```\n無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
+				await ctx.send(f"```{search_str}```\n無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
 			else:
-				await ctx.send(f"```{temp}```\n搜尋結果已經加入此播放清單之中：{search['title']}")
+				await ctx.send(f"```{search_str}```\n搜尋結果已經加入此播放清單之中：{search['title']}")
 
 				# res = "```"
 				# for i in search:
@@ -314,12 +314,11 @@ class music(Cog_Extension):
 
 	@commands.command(name='searching_test', aliases=['stest', 'searchtest'], help="播放所選的Youtube歌曲")
 	async def searching_test(self, ctx, *, arg):
-		temp = []
-		for i in args:
-			temp += i.replace("「","").replace("」","") #原本不知為何加了「」會報錯
-		args = tuple(temp)
+		search_str = arg
+		cleaned_arg = [word.replace("「","").replace("」","") for word in arg.split()] #原本不知為何加了「」會報錯
+		args = tuple(cleaned_arg)
 		query = " ".join(args)
-		await ctx.send("```"+arg+"```\n"+str(query)+"'")
+		await ctx.send(f"```{search_str}```\n{str(query)}\n{args[0]}: {"https://" not in args[0]}")
 
 	@commands.command(name='join', aliases=['jion'], help="加入語音頻道")
 	async def join(self, ctx):
@@ -426,4 +425,4 @@ class music(Cog_Extension):
 		await self.vc.disconnect()
 		
 async def setup(bot):
-	await bot.add_cog(music(bot))
+	await bot.add_cog(Music(bot))
