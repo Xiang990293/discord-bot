@@ -19,24 +19,41 @@ class Game(Cog_Extension):
 			rand *= face
 			rand = math.floor(rand) + 1
 			return rand
+		
+		def roll_dice_multiple(times, face):
+			if times == 1: return dice(face)
+			return [dice(face) for i in range(times)]
 
 		if args == ():
 			await ctx.send(f"你擲了 1 個 6 面骰\n點數是 {dice(6)}")
 			return
-		
-		(times, face) = args
-		times = int(times)
-		face = int(face)
-		
-		if type(times) != type(100):
-			await ctx.send("次數輸入錯誤，請輸入整數")
 
-		if type(face) != type(100):
-			await ctx.send("面數輸入錯誤，請輸入整數")
+		try:
+			(times, face) = args
+			times = int(times)
+			face = int(face)
 
-		result = [dice(face) for i in range(times)]
+			if type(times) != type(100):
+				await ctx.send("次數輸入錯誤，請輸入整數")
 
-		await ctx.send(f"你擲了 {times} 個 {face} 面骰\n點數是 {result}")
+			if type(face) != type(100):
+				await ctx.send("面數輸入錯誤，請輸入整數")
+
+			result = roll_dice_multiple(times, face)
+
+			await ctx.send(f"你擲了 {times} 個 {face} 面骰\n點數是 {result}")
+		except ValueError:
+			(state,) = args
+			if "d" in state:
+				try:
+					cut_pos = state.find("d")
+					times = int(state[0:cut_pos])
+					face = int(state[cut_pos+1:])
+					result = roll_dice_multiple(times, face)
+
+					await ctx.send(f"你擲了 {times} 個 {face} 面骰\n點數是 {result}")
+				except Exception as e:
+					await ctx.send(f"骰子格式錯誤：{e}")
 		
 		
 async def setup(bot):
