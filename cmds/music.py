@@ -222,7 +222,7 @@ class Music(Cog_Extension):
 			await ctx.send("無法容納過大上限之播放清單，上限將下調至 20")
 			limit = 20
 
-		if "https://" not in arg[0] & arg[0].startswith('https://'):
+		if ("https://" not in arg[0]) & (arg[0].startswith('https://')):
 			
 			search_str = arg
 			cleaned_arg = [word.replace("「","").replace("」","") for word in arg.split()] #原本不知為何加了「」會報錯
