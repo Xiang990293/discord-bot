@@ -222,7 +222,7 @@ class Music(Cog_Extension):
 			await ctx.send("無法容納過大上限之播放清單，上限將下調至 20")
 			limit = 20
 
-		if ("https://" not in arg[0]) & (arg[0].startswith('https://')):
+		if ("https://" not in arg[0]) and not (arg[0].startswith('https://')):
 			
 			search_str = arg
 			cleaned_arg = [word.replace("「","").replace("」","") for word in arg.split()] #原本不知為何加了「」會報錯
@@ -232,7 +232,7 @@ class Music(Cog_Extension):
 			search = self.search_yt(query, True)
 			
 			if type(search) == type(True):
-				await ctx.send(f"```{search_str}```\n無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
+				await ctx.send(f"```{search_str}```\n無法下載歌曲。請嘗試不同的關鍵字、播放清單或影片")
 			else:
 				await ctx.send(f"```{search_str}```\n搜尋結果已經加入此播放清單之中：{search['title']}")
 
@@ -251,7 +251,7 @@ class Music(Cog_Extension):
 			url = arg[0]
 			playlist = self.search_yt(url, long_limit=limit, is_list=True)
 			if type(playlist) == type(True):
-				await ctx.send("無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
+				await ctx.send("無法下載歌曲。清單網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
 			else:
 				await ctx.send("提供的播放清單已經加入此播放清單之中：")
 				res = "```"
