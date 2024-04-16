@@ -318,7 +318,7 @@ class Music(Cog_Extension):
 		cleaned_arg = [word.replace("「","").replace("」","") for word in arg.split()] #原本不知為何加了「」會報錯
 		args = tuple(cleaned_arg)
 		query = " ".join(args)
-		await ctx.send(f"```{search_str}```\n{str(query)}\n{args[0]}: {"https://" not in args[0]}")
+		await ctx.send(f"```{search_str}``` \n{str(query)} \n{args[0]}: {'https://' not in args[0]}")
 
 	@commands.command(name='join', aliases=['jion'], help="加入語音頻道")
 	async def join(self, ctx):

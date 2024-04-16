@@ -21,9 +21,10 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
         super().__init__(*args, directory='./temp_file', **kwargs)
 
 def start_http_server():
-    with socketserver.TCPServer(("0.0.0.0", 8080), MyHTTPRequestHandler) as httpd:
-        print("HTTP server running on port 8080...")
-        httpd.serve_forever()
+	ip = getj.get_jdata(MODE)["ip"]
+	with socketserver.TCPServer((ip, 8080), MyHTTPRequestHandler) as httpd:
+		print(f"HTTP server running on {ip}:8080...")
+		httpd.serve_forever()
 
 @bot.event
 async def on_ready():
