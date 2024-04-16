@@ -222,12 +222,12 @@ class Music(Cog_Extension):
 			await ctx.send("無法容納過大上限之播放清單，上限將下調至 20")
 			limit = 20
 
-		if "https://" not in args[0] & args[0].startswith('https://'):
+		if "https://" not in arg[0] & arg[0].startswith('https://'):
 			
 			search_str = arg
 			cleaned_arg = [word.replace("「","").replace("」","") for word in arg.split()] #原本不知為何加了「」會報錯
-			args = tuple(cleaned_arg)
-			query = " ".join(args)
+			arg = tuple(cleaned_arg)
+			query = " ".join(arg)
 
 			search = self.search_yt(query, True)
 			
@@ -247,8 +247,8 @@ class Music(Cog_Extension):
 
 				if not self.is_playing:
 					await self.play_music(ctx)
-		elif "playlist" in args[0]:
-			url = args[0]
+		elif "playlist" in arg[0]:
+			url = arg[0]
 			playlist = self.search_yt(url, long_limit=limit, is_list=True)
 			if type(playlist) == type(True):
 				await ctx.send("無法下載歌曲。網址格式不正確，請嘗試不同的關鍵字、播放清單或影片")
@@ -264,7 +264,7 @@ class Music(Cog_Extension):
 				if not self.is_playing:
 					await self.play_music(ctx)
 		else:
-			url = args[0]
+			url = arg[0]
 			if "&list=" in url:
 				list = url.find('&list=')
 				v = url.find('&v=')
@@ -316,9 +316,9 @@ class Music(Cog_Extension):
 	async def searching_test(self, ctx, *, arg):
 		search_str = arg
 		cleaned_arg = [word.replace("「","").replace("」","") for word in arg.split()] #原本不知為何加了「」會報錯
-		args = tuple(cleaned_arg)
-		query = " ".join(args)
-		await ctx.send(f"```{search_str}``` \n{str(query)} \n{args[0]}: {'https://' not in args[0]}")
+		arg = tuple(cleaned_arg)
+		query = " ".join(arg)
+		await ctx.send(f"```{search_str}``` \n{str(query)} \n{arg[0]}: {'https://' not in arg[0]}")
 
 	@commands.command(name='join', aliases=['jion'], help="加入語音頻道")
 	async def join(self, ctx):
