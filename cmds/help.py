@@ -32,7 +32,7 @@ class Help(Cog_Extension):
 		# 	for text_channel in self.text_channel_text:
 		# 		await text_channel.send(msg)
 	
-	@commands.command(help="顯示此列表，列出所有可用指令")
+	@commands.hybrid_command(help="顯示此列表，列出所有可用指令")
 	async def music_help(self, ctx):
 		await ctx.send(self.help_message)
 

@@ -54,7 +54,7 @@ class file(Cog_Extension):
 			print(f"Error accessing volume: {e}")
 			return None
 
-	@commands.command(name='upload', aliases=['ufile','upf'], help="Upload a file to the server")
+	@commands.hybrid_command(name='upload', aliases=['ufile','upf'], help="Upload a file to the server")
 	async def upload(self, ctx):
 		# Check if a file is attached to the message
 		if len(ctx.message.attachments) == 0:
@@ -74,7 +74,7 @@ class file(Cog_Extension):
 
 		await ctx.send(f"檔案 {attachment.filename} 上傳成功。")
 
-	@commands.command(name='download', aliases=['dfile','downf'], help="Download a file from the server")
+	@commands.hybrid_command(name='download', aliases=['dfile','downf'], help="Download a file from the server")
 	async def download(self, ctx, file_name):
 		self.download_file(file_name)
 		await ctx.send("File downloaded successfully!")

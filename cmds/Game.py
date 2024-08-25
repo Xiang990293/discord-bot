@@ -8,7 +8,7 @@ class Game(Cog_Extension):
 	def __init__(self, bot):
 		Cog_Extension.__init__(self, bot)
 
-	@commands.command(name='roll_dice', aliases=['dice','roll'], help="擲顆骰子，接受兩個數字：次數 面數")
+	@commands.hybrid_command(name='roll_dice', aliases=['dice','roll'], help="擲顆骰子，接受兩個數字：次數 面數")
 	async def roll_dice(self, ctx, *args):
 		await ctx.message.delete()
 
