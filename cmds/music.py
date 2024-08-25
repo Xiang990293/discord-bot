@@ -157,7 +157,6 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='download_video', aliases=['dv','downv','dvid'], help="下載並傳送提供之網址的影片/歌曲")
 	async def download_video(self, ctx, url):
-		await ctx.message.delete()
 		
 		def is_url_available(url):
 			try:
@@ -208,7 +207,6 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='play', aliases=['p', 'playing'], help="播放所選的Youtube歌曲")
 	async def play(self, ctx, *, arg, limit=10):
-		await ctx.message.delete()
 
 		vchannel = ctx.author.voice.channel
 
@@ -282,7 +280,6 @@ class Music(Cog_Extension):
 	
 	@commands.hybrid_command(name='playMinecraft', aliases=['pmc', 'playmc'], help="播放所選的Minecraft歌曲")
 	async def playMinecraft(self, ctx, arg):
-		await ctx.message.delete()
 		if arg == "list":
 			await ctx.send("```"+str(os.listdir('files/music')).replace(".ogg', '", "\n").replace("['","").replace(".ogg']","")+"```")
 			return
@@ -304,7 +301,6 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='playing_test', aliases=['ptest', 'playtest'], help="播放所選的Youtube歌曲")
 	async def playing_test(self, ctx, *, arg):
-		await ctx.message.delete()
 		res = eval(arg)
 		print(str(res))
 		if inspect.isawaitable(res):
@@ -322,12 +318,10 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='join', aliases=['jion'], help="加入語音頻道")
 	async def join(self, ctx):
-		await ctx.message.delete()
 		await self.connect_to_channel(ctx)
 
 	@commands.hybrid_command(name='pause', aliases=['pa','stop','stopped'], help="停止播放目前的歌曲")
 	async def pause(self, ctx):
-		await ctx.message.delete()
 		if self.is_playing:
 			self.is_playing = False
 			self.is_paused = True
@@ -341,7 +335,6 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name="resume", aliases=['r'], help="重新播放目前的歌曲")
 	async def resume(self, ctx):
-		await ctx.message.delete()
 		if self.is_playing:
 			self.is_playing = False
 			self.is_paused = True
@@ -357,14 +350,12 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='skip', aliases=['s'], help="跳過目前的歌曲")
 	async def skip(self, ctx, *args):
-		await ctx.message.delete()
 		if self.vc != None and self.vc:
 			self.vc.stop()
 			await self.play_next({'Skip':True})
 
 	@commands.hybrid_command(name='loop', aliases=['looping'], help="切換重複播放模式")
 	async def loop(self, ctx, *arg):
-		await ctx.message.delete()
 		self.loop_mode += 1
 		self.loop_mode %= 3
 
@@ -386,8 +377,6 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='getqueue', aliases=['gque','gq','getq'], help="列出所有目前在清單中的所有歌曲")
 	async def getqueue(self, ctx):
-		await ctx.message.delete()
-		
 		if len(self.music_queue) == 0:
 			await ctx.send("目前清單中沒有任何歌曲")
 			return
@@ -402,7 +391,6 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='clear', help="清除目前清單中所有歌曲")
 	async def clear(self, ctx, *args):
-		await ctx.message.delete()
 		if self.vc != None and self.is_playing:
 			self.vc.stop()
 		self.music_queue = []
@@ -410,7 +398,6 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='volume', aliases=['v'], help="設定音量")
 	async def volume(self, ctx, *args):
-		await ctx.message.delete()
 		if self.vc!= None and self.is_playing:
 			self.vc.volume = int(args[0])
 			await ctx.send(f"音量已設定為 {args[0]}")
@@ -419,7 +406,6 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='leave', aliases=['l'], help="請我離開頻道")
 	async def leave(self, ctx):
-		await ctx.message.delete()
 		self.is_playing = False
 		self.is_paused = False
 		await self.vc.disconnect()

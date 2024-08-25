@@ -28,14 +28,13 @@ class video_download(Cog_Extension):
 			'outtmpl': f'temp_file/download_{self.amount}.%(ext)s'
 		}
 
-	@commands.command(name='reset', aliases=['rs'], help="下載影片")
+	@commands.hybrid_command(name='reset', aliases=['rs'], help="下載影片")
 	async def reset(self, ctx):
-		await ctx.message.delete()
 		self.amount = 0
 		print("下載除列已清空")
 		await ctx.send("下載除列已清空")
 		
-	@commands.command(name='download_video_to_google', aliases=['dvtg', 'dvidtg'], help="下載影片")
+	@commands.hybrid_command(name='download_video_to_google', aliases=['dvtg', 'dvidtg'], help="下載影片")
 	async def dowmload_video_to_google(self, ctx, url: str):
 		def is_url_available(url):
 			try:
@@ -94,7 +93,7 @@ class video_download(Cog_Extension):
 				await ctx.send("目前在下載其他影片...")
 
 
-	@commands.command(name='download_options', aliases=['dopt', 'dops', 'doptions'], help="播放所選的Youtube歌曲")
+	@commands.hybrid_command(name='download_options', aliases=['dopt', 'dops', 'doptions'], help="播放所選的Youtube歌曲")
 	async def download_options(self, ctx, option_name: str, option_value: str):
 		# 設定下載選項
 		if option_name in self.options:
@@ -105,7 +104,7 @@ class video_download(Cog_Extension):
 
 		await ctx.send(f"設定完成")
 
-	@commands.command()
+	@commands.hybrid_command()
 	async def test_lib(self, ctx, url):
 		encoded_url = urllib.parse.quote(url, safe=':/')
 

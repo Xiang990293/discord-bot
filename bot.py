@@ -26,6 +26,12 @@ def start_http_server():
 		print(f"HTTP server running on {ip}:8080...")
 		httpd.serve_forever()
 
+@bot.command(name="synccmd", alienses=["synccommands"], help="同步斜線指令")
+@commands.has_permissions(administrator=True)
+async def synccommands(ctx):
+	await bot.tree.sync()
+	await ctx.send("同步完成")
+
 @bot.event
 async def on_ready():
 	print(f"等登!機器人已經上線")
@@ -40,9 +46,8 @@ async def on_ready():
 	http_thread.start()
 
 
-@bot.command()
+@bot.hybrid_command()
 async def load(ctx, extension):
-	await ctx.message.delete()
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			try:
@@ -65,9 +70,8 @@ async def load(ctx, extension):
 				continue
 		await ctx.send(f'載入完成!')
 
-@bot.command()
+@bot.hybrid_command()
 async def reload(ctx, extension):
-	await ctx.message.delete()
 	music_cog = bot.get_cog("music")
 	
 	if music_cog is not None:
@@ -88,9 +92,8 @@ async def reload(ctx, extension):
 				await bot.reload_extension(f'cmds.{filename[:-3]}')
 		await ctx.send(f'重新載入完成!')
 
-@bot.command()
+@bot.hybrid_command()
 async def unload(ctx, extension):
-	await ctx.message.delete()
 	# music_cog = bot.get_cog("music")
 	# if music_cog.vc != None | music_cog.vc.is_connected():
 	# 	music_cog.vc.disconnect()
@@ -116,9 +119,8 @@ async def unload(ctx, extension):
 				continue
 		await ctx.send(f'卸載完成!')
 
-@bot.command(name='bot_test', aliases=['btest'], help="機器人測試指令")
+@bot.hybrid_command(name='bot_test', aliases=['btest'], help="機器人測試指令")
 async def bot_test(ctx, *, arg):
-	await ctx.message.delete()
 	res = eval(arg)
 	print(str(res))
 	if inspect.isawaitable(res):
