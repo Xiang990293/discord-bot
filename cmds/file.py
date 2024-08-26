@@ -56,6 +56,7 @@ class file(Cog_Extension):
 
 	@commands.hybrid_command(name='upload', aliases=['ufile','upf'], help="Upload a file to the server")
 	async def upload(self, ctx):
+		await interaction.response.defer()  
 		# Check if a file is attached to the message
 		if len(ctx.message.attachments) == 0:
 			await ctx.send("請附加一個檔案用以上傳")
@@ -76,6 +77,7 @@ class file(Cog_Extension):
 
 	@commands.hybrid_command(name='download', aliases=['dfile','downf'], help="Download a file from the server")
 	async def download(self, ctx, file_name):
+		await interaction.response.defer()
 		self.download_file(file_name)
 		await ctx.send("File downloaded successfully!")
 	

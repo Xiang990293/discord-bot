@@ -48,6 +48,7 @@ async def on_ready():
 
 @bot.hybrid_command()
 async def load(ctx, extension):
+	await interaction.response.defer()  
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			try:
@@ -68,11 +69,11 @@ async def load(ctx, extension):
 					await bot.load_extension(f'cmds.{filename[:-3]}')
 			except commands.ExtensionAlreadyLoaded:
 				continue
-		await interaction.followup.send(file=discord.File(video_path))
 		await ctx.send(f'載入完成!')
 
 @bot.hybrid_command()
 async def reload(ctx, extension):
+	await interaction.response.defer()  
 	music_cog = bot.get_cog("music")
 	
 	if music_cog is not None:
@@ -98,6 +99,7 @@ async def unload(ctx, extension):
 	# music_cog = bot.get_cog("music")
 	# if music_cog.vc != None | music_cog.vc.is_connected():
 	# 	music_cog.vc.disconnect()
+	await interaction.response.defer()  
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			try:
