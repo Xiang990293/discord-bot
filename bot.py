@@ -68,6 +68,7 @@ async def load(ctx, extension):
 					await bot.load_extension(f'cmds.{filename[:-3]}')
 			except commands.ExtensionAlreadyLoaded:
 				continue
+		await interaction.followup.send(file=discord.File(video_path))
 		await ctx.send(f'載入完成!')
 
 @bot.hybrid_command()
