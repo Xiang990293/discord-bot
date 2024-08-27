@@ -322,7 +322,7 @@ class Music(Cog_Extension):
 	@commands.hybrid_command(name='join', aliases=['jion'], with_app_command=True, help="加入語音頻道")
 	async def join(self, ctx):
 		await self.connect_to_channel(ctx)
-		await self.Send("已加入")
+		await self.send("已加入")
 
 	@commands.hybrid_command(name='pause', aliases=['pa','stop','stopped'], with_app_command=True, help="停止播放目前的歌曲")
 	async def pause(self, ctx):
