@@ -46,9 +46,10 @@ async def on_ready():
 	http_thread.start()
 
 
-@bot.hybrid_command()
-async def load(ctx, extension):
-	await interaction.response.defer()  
+@bot.hybrid_command(with_app_command=True, help="加載模組")
+async def load(ctx, 模組):
+	await interaction.response.defer()
+	extension = 模組
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			try:
@@ -71,9 +72,10 @@ async def load(ctx, extension):
 				continue
 		await ctx.send(f'載入完成!')
 
-@bot.hybrid_command()
-async def reload(ctx, extension):
-	await interaction.response.defer()  
+@bot.hybrid_command(with_app_command=True, help="重載模組")
+async def reload(ctx, 模組):
+	await interaction.response.defer()
+	extension = 模組 
 	music_cog = bot.get_cog("music")
 	
 	if music_cog is not None:
@@ -94,12 +96,13 @@ async def reload(ctx, extension):
 				await bot.reload_extension(f'cmds.{filename[:-3]}')
 		await ctx.send(f'重新載入完成!')
 
-@bot.hybrid_command()
-async def unload(ctx, extension):
+@bot.hybrid_command(with_app_command=True, help="停用模組")
+async def unload(ctx, 模組):
 	# music_cog = bot.get_cog("music")
 	# if music_cog.vc != None | music_cog.vc.is_connected():
 	# 	music_cog.vc.disconnect()
-	await interaction.response.defer()  
+	await interaction.response.defer()
+	extension = 模組
 	if extension != 'all':
 		if f"{extension}.py" in os.listdir('./cmds'):
 			try:

@@ -206,9 +206,10 @@ class Music(Cog_Extension):
 				await ctx.send("目前在下載其他影片...")
 
 	@commands.hybrid_command(name='play', aliases=['p', 'playing'], with_app_command=True, help="播放所選的Youtube歌曲")
-	async def play(self, ctx, *, arg, limit=10):
+	async def play(self, ctx, *, 歌名or網址, limit=10):
 		await interaction.response.defer()
 		vchannel = ctx.author.voice.channel
+		arg = 歌名or網址
 
 		#檢測使用者是否在語音頻道
 		if self.vc is None:
