@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
 from core.classes import Cog_Extension
 import random
 import math
@@ -8,12 +9,18 @@ class Game(Cog_Extension):
 	def __init__(self, bot):
 		Cog_Extension.__init__(self, bot)
 
-	@commands.hybrid_command(name='roll_dice', aliases=['dice','roll'], with_app_command=True, help="擲顆骰子，接受兩個數字：次數 面數")
-	async def roll_dice(self, ctx, times: int, face: int):
+	@commands.tree.hybrid_command(name='roll_dice', aliases=['dice','roll'], with_app_command=True, help="擲顆骰子，接受兩個數字：次數 面數")
+	@app_commands.choices(name=[
+		app_commands.Choice(name='Name 1', value=1),
+		app_commands.Choice(name='Name 2', value=2)
+	])
+	@app_commands.choices(day=[
+		app_commands.Choice(name='Monday', value=1),
+		app_commands.Choice(name='Tuesday', value=2)
+	])
+	async def roll_dice(self, ctx, times = 1, face = 6, dice_expression = "1d6"):
 		"""擲顆骰子，接受兩個數字：次數 面數"""
 		def dice(face):
-			if type(face)!=type(100):
-				return -1
 			rand = random.random()
 			rand *= face
 			rand = math.floor(rand) + 1
@@ -23,36 +30,23 @@ class Game(Cog_Extension):
 			if times == 1: return dice(face)
 			return [dice(face) for i in range(times)]
 
-		if args == ():
-			await ctx.send(f"你擲了 1 個 6 面骰\n點數是 {dice(6)}")
-			return
+		if times == 0: times = 1
+		if face == 0: face = 6
 
-		try:
-			(times, face) = args
-			times = int(times)
-			face = int(face)
+		result = roll_dice_multiple(times, face)
 
-			if type(times) != type(100):
-				await ctx.send("次數輸入錯誤，請輸入整數")
+		await ctx.send(f"你擲了 {times} 個 {face} 面骰\n點數是 {result}")
+		(state,) = dice_expression
+		if "d" in state:
+			try:
+				cut_pos = state.find("d")
+				times = int(state[0:cut_pos])
+				face = int(state[cut_pos+1:])
+				result = roll_dice_multiple(times, face)
 
-			if type(face) != type(100):
-				await ctx.send("面數輸入錯誤，請輸入整數")
-
-			result = roll_dice_multiple(times, face)
-
-			await ctx.send(f"你擲了 {times} 個 {face} 面骰\n點數是 {result}")
-		except ValueError:
-			(state,) = args
-			if "d" in state:
-				try:
-					cut_pos = state.find("d")
-					times = int(state[0:cut_pos])
-					face = int(state[cut_pos+1:])
-					result = roll_dice_multiple(times, face)
-
-					await ctx.send(f"你擲了 {times} 個 {face} 面骰\n點數是 {result}")
-				except Exception as e:
-					await ctx.send(f"骰子格式錯誤：{e}")
+				await ctx.send(f"你擲了 {times} 個 {face} 面骰\n點數是 {result}")
+			except Exception as e:
+				await ctx.send(f"骰子格式錯誤：{e}")
 		
 		
 async def setup(bot):
