@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord import Interaction
 from core.classes import Cog_Extension
 from yt_dlp import YoutubeDL
 import os
@@ -157,7 +158,7 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='download_video', aliases=['dv','downv','dvid'], with_app_command=True, help="下載並傳送提供之網址的影片/歌曲")
 	async def download_video(self, ctx, url):
-		await interaction.response.defer()  
+		await Interaction.response.defer()  
 		def is_url_available(url):
 			try:
 				with YoutubeDL() as ydl:
@@ -207,7 +208,7 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='play', aliases=['p', 'playing'], with_app_command=True, help="播放所選的Youtube歌曲")
 	async def play(self, ctx, *, 歌名or網址, limit=10):
-		await interaction.response.defer()
+		await Interaction.response.defer()
 		vchannel = ctx.author.voice.channel
 		arg = 歌名or網址
 
@@ -302,7 +303,7 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='playing_test', aliases=['ptest', 'playtest'], with_app_command=True, help="播放所選的Youtube歌曲")
 	async def playing_test(self, ctx, *, arg):
-		await interaction.response.defer()  
+		await ctx.interaction.response.defer()  
 		res = eval(arg)
 		print(str(res))
 		if inspect.isawaitable(res):
@@ -312,7 +313,7 @@ class Music(Cog_Extension):
 
 	@commands.hybrid_command(name='searching_test', aliases=['stest', 'searchtest'], with_app_command=True, help="播放所選的Youtube歌曲")
 	async def searching_test(self, ctx, *, arg):
-		await interaction.response.defer()  
+		await Interaction.response.defer()  
 		search_str = arg
 		cleaned_arg = [word.replace("「","").replace("」","") for word in arg.split()] #原本不知為何加了「」會報錯
 		arg = tuple(cleaned_arg)
