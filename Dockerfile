@@ -6,6 +6,7 @@ COPY . /bot
 RUN apt-get update && apt-get install -y ffmpeg libavcodec-extra libssl-dev libasound2
 # RUN GO111MODULE=on go get -u github.com/DarthSim/overmind/v2
 RUN pip install pipenv
+RUN pip install -U https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/refs/heads/master.zip
 ADD Procfile /bot/
 COPY start.sh /bot/
 RUN chmod +x /bot/start.sh
