@@ -1,2 +1,1 @@
--u oauth
--p ''
+-u oauth -p ''
