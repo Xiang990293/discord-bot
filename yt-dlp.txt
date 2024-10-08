@@ -1,0 +1,2 @@
+-u ${{ secrets.oauth_username }}
+-p ${{ secrets.oauth_password }}

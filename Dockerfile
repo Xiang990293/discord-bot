@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.12
 WORKDIR /bot
 COPY requirements.txt /bot/
 RUN pip install -r requirements.txt
@@ -12,6 +12,7 @@ COPY start.sh /bot/
 RUN chmod +x /bot/start.sh
 RUN chmod +x /bot/bot.py
 RUN chmod +x /bot/functions/file_server.py
+RUN yt-dlp --config-location /bot/yt-dlp.txt
 # CMD ["overmind", "start"]
 CMD python bot.py
 # CMD start.sh
