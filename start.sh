@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Setting the yt-dlp first
+yt-dlp --config-location /bot/yt-dlp.txt
+
 # Start your Discord bot in the background
 python bot.py
 
