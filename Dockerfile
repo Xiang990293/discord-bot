@@ -1,3 +1,4 @@
+# these thing runs on main, not container.
 FROM python:3.12
 WORKDIR /bot
 COPY requirements.txt /bot/

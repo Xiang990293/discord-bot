@@ -70,27 +70,27 @@ class video_download(Cog_Extension):
 
 			self.bot.loop.create_task(ctx.send(f"下載期限為30天", delete_after=30))
 
+		await ctx.message.delete()
 		if ctx.author.bot:
-			await ctx.message.delete()
 			await ctx.send(f"嗶啵！啵嗶。機器人！")
+			return
+
+		if self.amount != 0:
+			print("目前在下載其他影片")
+			await ctx.send("目前在下載其他影片，請稍後再試")
+			return
+
+		self.amount += 1
+		await ctx.send(f"正在檢查連結...")
+		if is_url_available(url):
+			print(f"正在下載： {url}")
+			await ctx.send(f"正在下載： {url}")
+			thread = threading.Thread(target=download_and_upload, args=(url, self.options))
+			thread.start()
 		else:
-			await ctx.message.delete()
-			if self.amount == 0:
-				self.amount += 1
-				await ctx.send(f"正在檢查連結是否可用...")
-				if is_url_available(url):
-					print(f"正在下載： {url}")
-					await ctx.send(f"正在下載： {url}")
-					thread = threading.Thread(target=download_and_upload, args=(url, self.options))
-					thread.start()
-				else:
-					print("影片連結不可用")
-					await ctx.send("影片連結不可用")
-					self.amount == 0
-				
-			else:
-				print("目前在下載其他影片")
-				await ctx.send("目前在下載其他影片...")
+			print("影片連結不可用")
+			await ctx.send("影片連結不可用")
+			self.amount == 0
 
 
 	@commands.hybrid_command(name='download_options', aliases=['dopt', 'dops', 'doptions'], help="播放所選的Youtube歌曲")

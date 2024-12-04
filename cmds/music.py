@@ -287,18 +287,24 @@ class Music(Cog_Extension):
 		
 		if self.vc == None:
 			await ctx.send("請進到語音頻道")
-		elif self.is_paused:
+			return
+		
+		if self.is_paused:
 			self.vc.resume()
+			return
+		
+		# if with argument, play that song, if not, play hole list.
+		if arg+".ogg" in os.listdir('files/music'):
+			self.music_queue.append({'source': f"files/music/{arg}.ogg", 'Minecraft': True, 'title':arg})
+			await ctx.send(f"歌曲已經加入清單之中： {arg}")
 		else:
-			if arg+".ogg" in os.listdir('files/music'):
-				self.music_queue.append({'source': f"files/music/{arg}.ogg", 'Minecraft': True, 'title':arg})
-				await ctx.send(f"歌曲已經加入清單之中： {arg}")
-			else:
-				f = os.listdir('files/music')
-				for i in f:
-					self.music_queue.append({'source': f"files/music/{i}", 'Minecraft': True, 'title':i.replace(".ogg", "")})
-			if not self.is_playing:
-				await self.play_music(ctx)
+			files = os.listdir('files/music')
+			for song in files:
+				self.music_queue.append({'source': f"files/music/{song}", 'Minecraft': True, 'title':song.replace(".ogg", "")})
+			await ctx.send(f"所有 Minecraft 歌曲皆加入清單之中")
+
+		if not self.is_playing:
+			await self.play_music(ctx)
 
 	@commands.hybrid_command(name='playing_test', aliases=['ptest', 'playtest'], with_app_command=True, help="播放所選的Youtube歌曲")
 	async def playing_test(self, ctx, *, arg):
@@ -365,19 +371,20 @@ class Music(Cog_Extension):
 
 		if arg=="help":
 			await ctx.send(f"利用 `!!loop` 進行模式切換\n單曲循環模式直接將正要開始播放的歌曲直接加入表頭\n播放列表循環模式將正要開始播放的歌曲直接加入表尾\n關閉後會再次播放當前歌曲")
-		else:
-			if arg=="0" or arg=="1" or arg=="2":
-				self.loop_mode = int(arg)
+			return
+		
+		if arg=="0" or arg=="1" or arg=="2":
+			self.loop_mode = int(arg)
 
-			match self.loop_mode:
-				case 0:
-					loop = "正常模式"
-				case 1:
-					loop = "單曲循環模式"
-				case 2:
-					loop = "播放列表循環模式"
-			
-			await ctx.send(f"已切換為**{loop}**")
+		match self.loop_mode:
+			case 0:
+				loop = "正常模式"
+			case 1:
+				loop = "單曲循環模式"
+			case 2:
+				loop = "播放列表循環模式"
+		
+		await ctx.send(f"已切換為**{loop}**")
 
 	@commands.hybrid_command(name='getqueue', aliases=['gque','gq','getq'], with_app_command=True, help="列出所有目前在清單中的所有歌曲")
 	async def getqueue(self, ctx):
