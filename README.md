@@ -9,3 +9,6 @@ Using YoutubeDL module to download video from internet, and store the result ont
 
 ### Voice Channel Song Playing
 (Still bug and not work now, will be done in half year.)
+
+# Installation (not recommanded)
+Well, I think this trash is easy to build your own form scratch.
